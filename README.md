@@ -1,6 +1,6 @@
-# MeteoChile (prototipo de app del clima de Chile) v4.0
+# MeteoChile (prototipo de app del clima de Chile) v5.0
 
-🔗[https://github.com/sebasiohx/weather-frontend-m4](https://github.com/sebasiohx/weather-frontend-m4)
+🔗[https://github.com/sebasiohx/weather-frontend-m5](https://github.com/sebasiohx/weather-frontend-m5)
 
 ## 📘 Características
 
@@ -16,10 +16,10 @@ Sigue estos pasos para correr el proyecto localmente:
 
 ```bash
 # 1. Clona el repositorio
-git clone https://github.com/sebasiohx/weather-frontend-m4.git
+git clone https://github.com/sebasiohx/weather-frontend-m5.git
 
 # 2. Entra a la carpeta del proyecto
-cd weather-frontend-m4
+cd weather-frontend-m5
 
 # 3. Abre el proyecto (sin dependencias, es vanilla JS)
 # Opción A: Abre index.html directo en el navegador
