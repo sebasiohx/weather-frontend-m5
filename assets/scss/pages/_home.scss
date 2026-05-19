@@ -1,0 +1,7 @@
+@use "../abstracts" as *;
+
+.hero-section {
+  background-image: url("../img/bg-santiago.jpg");
+  background-size: cover;
+  background-position: center bottom;
+}

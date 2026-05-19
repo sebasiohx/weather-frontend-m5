@@ -1,0 +1,9 @@
+# Sistemas operativos
+.DS_Store
+Thumbs.db
+
+# TypeScript
+interfaces.ts
+
+# Prompt pseudo data
+prompt-data-regiones.txt

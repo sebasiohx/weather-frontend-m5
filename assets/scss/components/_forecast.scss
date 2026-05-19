@@ -1,0 +1,32 @@
+@use "../abstracts" as *;
+
+%width-column {
+  width: 55px;
+}
+
+.forecast {
+  &__list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border: 1px solid $color-primary-light;
+
+    &--home {
+      background-color: $color-bg;
+    }
+    &--detail {
+      background-color: $color-accent;
+      color: $color-text-2;
+    }
+  }
+  &__day {
+    @extend %width-column;
+  }
+  &__climates {
+    @extend %width-column;
+  }
+  &__temperatures {
+    @extend %width-column;
+    text-align: end;
+  }
+}

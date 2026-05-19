@@ -1,0 +1,15 @@
+@use "../abstracts" as *;
+
+.body {
+  background-color: $color-bg;
+  background-attachment: fixed;
+  color: $color-text-1;
+  padding: 8px;
+
+  &--home {
+    background-image: $bg-gradient-home;
+  }
+  &--detail {
+    background-image: $bg-gradient-detail;
+  }
+}

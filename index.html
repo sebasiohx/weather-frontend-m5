@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MeteoChile</title>
+
+    <!-- CSS Bootrstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- CSS local -->
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body class="body body--home d-flex flex-column min-vh-100 p-2">
+    <nav class="navbar navbar-expand-lg nav-weather sticky-top rounded mb-2">
+      <div class="container-fluid">
+        <a class="btn-home navbar-brand fw-bold tc-accent" href="#"
+          ><i class="fa-solid fa-cloud-sun me-2"></i>MeteoChile</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link btn-home active" aria-current="page" href="#"
+                >Inicio</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn-home"
+                aria-current="page"
+                href="#vista-home"
+                >Detalle</a
+              >
+            </li>
+          </ul>
+          <form id="form-busqueda" class="d-flex" role="search">
+            <input
+              id="input-busqueda"
+              class="nav-weather__input form-control me-2"
+              type="search"
+              placeholder="Buscar ciudad"
+              aria-label="Buscar"
+            />
+            <button
+              id="btn-busqueda"
+              class="nav-weather__btn-search btn btn-primary"
+              type="submit"
+            >
+              Buscar
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <header id="hero-section" class="hero-section py-5 px-2 px-md-0 rounded">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 offset-md-1">
+            <div class="row d-flex flex-md-row g-3">
+              <div class="col-md-6">
+                <article class="card p-4 hero-card">
+                  <div class="row g-2">
+                    <div class="col-12">
+                      <div class="hero-card__inner-card p-2 align-items-start">
+                        <h2 id="nombre-ciudad-hero" class="fw-bolder mb-1"></h2>
+                        <h2
+                          id="nombre-region-hero"
+                          class="hero-card__region"
+                        ></h2>
+                      </div>
+                    </div>
+
+                    <div class="col-6 col-lg-5">
+                      <div class="hero-card__inner-card">
+                        <div class="ms-1">
+                          <h1
+                            id="cifra-temperatura-hero"
+                            class="display-2 fw-bold lh-1 mb-2 tc-accent"
+                          ></h1>
+                          <h3
+                            id="min-max-temperatura-hero"
+                            class="ms-1 text-body-emphasis"
+                          ></h3>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-6 col-lg-4">
+                      <div
+                        id="card-estado-climatico"
+                        class="hero-card__inner-card gap-3 h-100"
+                      ></div>
+                    </div>
+                    <div
+                      id="container-fecha-hero"
+                      class="col-12 text-center text-md-start"
+                    ></div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="col-md-6">
+                <article>
+                  <div class="card p-3 mb-3 hero-card">
+                    <h5 class="mb-0">Pronóstico siguientes 7 días</h5>
+                  </div>
+                  <div id="card-pronostico" class="card p-4 hero-card"></div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="d-flex flex-column flex-grow-1">
+      <section id="vista-home" class="py-4 py-md-5">
+        <h2 class="text-center display-5 my-5">
+          Seleccione una de las siguientes ciudades
+        </h2>
+        <div class="container">
+          <div id="regiones-container" class="row mt-0 g-4"></div>
+        </div>
+      </section>
+
+      <section id="vista-detalle" class="detail-view py-5 flex-grow-1 d-none">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-lg-8 offset-lg-2">
+              <button class="btn btn-home btn-outline-light mb-4">
+                <i class="fa-solid fa-arrow-left"></i> Volver al Inicio
+              </button>
+
+              <!-- ===================== -->
+              <article id="detalle-container">
+                <div class="detail-header mb-5">
+                  <div class="row">
+                    <!-- divDatosContainer1 -->
+                    <div id="datos-container-1" class="col-md-6"></div>
+                    <!-- imgCiudadDetalle -->
+                    <div id="img-ciudad-detalle" class="col-md-6"></div>
+                  </div>
+                </div>
+                <div class="detalle-data">
+                  <div class="row">
+                    <div class="col-12 col-md-6">
+                      <div class="row mb-3">
+                        <!-- divDatosContainer2 -->
+                        <div id="datos-container-2" class="col-md-6"></div>
+                        <!-- divDatosContainer3 -->
+                        <div
+                          id="datos-container-3"
+                          class="col-md-6 d-flex flex-row flex-md-column justify-content-between"
+                        ></div>
+                      </div>
+                      <div class="row">
+                        <!-- divDatosContainer4  PENDIENTE -->
+                        <div id="datos-container-4" class="col-12"></div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                      <p class="detail-view__subtitle">
+                        Pronóstico siguientes 7 días
+                      </p>
+                      <!-- ulPronosticoDetalle -->
+                      <ul
+                        id="pronostico-detalle"
+                        class="list-group forecast mb-5"
+                      ></ul>
+                    </div>
+                  </div>
+                </div>
+              </article>
+              <!-- ===================== -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer py-4 rounded">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <p class="fs-6">
+              <i class="fa-solid fa-cloud-sun me-2"></i>MeteoChile &copy;2026
+            </p>
+            <p class="fs-6">Hecho por Sebastián Olate Huenuñir</p>
+            <p class="fs-6">
+              Sitio web del clima de las regiones de Chile, hecho con Bootstrap,
+              SASS y Javascript Vanilla
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JS Bootstrap -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <!-- JS local -->
+    <script src="./assets/js/data.js"></script>
+    <script src="./assets/js/main.js"></script>
+  </body>
+</html>

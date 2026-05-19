@@ -1,0 +1,38 @@
+@use "../abstracts/" as *;
+
+.hero-card {
+  backdrop-filter: blur(8px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba($color-bg, 0.6);
+
+  &__inner-card {
+    background-color: $color-bg;
+    color: $color-text-1;
+    padding: 1rem;
+    border-radius: 6px;
+    @include flex-center(column);
+  }
+
+  &__region {
+    @include text-lead;
+    margin-bottom: 0;
+  }
+
+  &__date {
+    @include text-lead($fsz: "big");
+    margin-bottom: 1rem;
+  }
+
+  &__btn-action {
+    background-color: $color-primary;
+    color: $color-text-1;
+
+    &:hover {
+      background-color: $color-primary-light;
+      border-color: $color-primary-dark;
+      transition:
+        background 300ms,
+        border 600ms;
+    }
+  }
+}

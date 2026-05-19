@@ -1,0 +1,205 @@
+.bgc-primary {
+  background-color: #2fd5ff;
+}
+
+.bgc-primary-light {
+  background-color: #97eaff;
+}
+
+.bgc-secondary {
+  background-color: #1a1a2e;
+}
+
+.bgc-accent {
+  background-color: #243870;
+}
+
+.tc-primary {
+  color: #2fd5ff;
+}
+
+.tc-primary-light {
+  color: #97eaff;
+}
+
+.tc-secondary {
+  color: #1a1a2e;
+}
+
+.tc-accent {
+  color: #243870;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.body {
+  background-color: #fff;
+  background-attachment: fixed;
+  color: #272727;
+  padding: 8px;
+}
+.body--home {
+  background-image: radial-gradient(125% 125% at 50% 90%, #fff 40%, rgb(0, 156.6625, 196.3) 100%);
+}
+.body--detail {
+  background-image: radial-gradient(125% 125% at 50% 90%, #1a1a2e 40%, #2fd5ff 100%);
+}
+
+.forecast__temperatures, .forecast__climates, .forecast__day {
+  width: 55px;
+}
+
+.forecast__list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border: 1px solid #97eaff;
+}
+.forecast__list-item--home {
+  background-color: #fff;
+}
+.forecast__list-item--detail {
+  background-color: #243870;
+  color: #e0e0e0;
+}
+.forecast__temperatures {
+  text-align: end;
+}
+
+.hero-card {
+  backdrop-filter: blur(8px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+.hero-card__inner-card {
+  background-color: #fff;
+  color: #272727;
+  padding: 1rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.hero-card__region {
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin-bottom: 0;
+}
+.hero-card__date {
+  font-size: 1.125rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+.hero-card__btn-action {
+  background-color: #2fd5ff;
+  color: #272727;
+}
+.hero-card__btn-action:hover {
+  background-color: #97eaff;
+  border-color: rgb(0, 156.6625, 196.3);
+  transition: background 300ms, border 600ms;
+}
+
+.regions-card {
+  border-color: #97eaff;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.regions-card:hover {
+  transform: translateY(-5px);
+  /* box-shadow recibe hasta 5 propiedades */
+  /* desplazamiento-x desplazamiento-y desenfoque propagacion color */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+.regions-card__image {
+  height: 200px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.regions-card__current-climate {
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.regions-card__min-max {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.nav-weather {
+  background-color: #2fd5ff;
+  color: #243870;
+}
+.nav-weather__input {
+  border: 1px solid #243870;
+  color: #243870;
+}
+.nav-weather__input--error {
+  border: 1px solid red;
+}
+.nav-weather__btn-search {
+  background-color: #243870;
+  border: 1px solid #243870;
+}
+.nav-weather__btn-search:hover {
+  background-color: #1a1a2e;
+  color: #2fd5ff;
+}
+
+.footer {
+  background-color: #97eaff;
+  color: #243870;
+}
+
+.hero-section {
+  background-image: url("../img/bg-santiago.jpg");
+  background-size: cover;
+  background-position: center bottom;
+}
+
+.detail-view {
+  color: #e0e0e0;
+}
+.detail-view__image {
+  height: 360px;
+  width: 420px;
+  max-width: 100%;
+}
+.detail-view__region {
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+.detail-view__desciption {
+  font-size: 0.875rem;
+}
+.detail-view__subtitle {
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+.detail-view__list-item {
+  background-color: transparent;
+  color: #e0e0e0;
+  text-align: start;
+}
+@media screen and (width <= 767px) {
+  .detail-view__image {
+    height: 200px;
+    width: 100%;
+  }
+  .detail-view__list-item {
+    text-align: center;
+  }
+}/*# sourceMappingURL=styles.css.map */

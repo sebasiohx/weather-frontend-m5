@@ -1,0 +1,43 @@
+@use "sass:color";
+
+$color-primary: #2fd5ff;
+$color-primary-light: color.scale($color-primary, $lightness: 50%);
+$color-primary-dark: color.scale($color-primary, $lightness: -35%);
+$color-secondary: #1a1a2e;
+$color-accent: #243870;
+$color-text-1: #272727;
+$color-text-2: #e0e0e0;
+$color-bg: #fff;
+$bg-gradient-home: radial-gradient(
+  125% 125% at 50% 90%,
+  $color-bg 40%,
+  $color-primary-dark 100%
+);
+$bg-gradient-detail: radial-gradient(
+  125% 125% at 50% 90%,
+  $color-secondary 40%,
+  $color-primary 100%
+);
+
+// Map
+$font-weights: (
+  "light": 300,
+  "regular": 400,
+  "medium": 500,
+  "bold": 700,
+);
+$font-sizes: (
+  //12px
+  "small": 0.75rem,
+  //16px
+  "regular": 1rem,
+  //18px
+  "big": 1.125rem,
+  //20px
+  "lead": 1.25rem,
+  //36px
+  "title": 2.25rem
+);
+
+$mobile: 767px;
+$monitor: 1023px;

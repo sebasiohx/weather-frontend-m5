@@ -1,0 +1,24 @@
+@use "../abstracts" as *;
+
+.nav-weather {
+  background-color: $color-primary;
+  color: $color-accent;
+
+  &__input {
+    border: 1px solid $color-accent;
+    color: $color-accent;
+
+    &--error {
+      border: 1px solid red;
+    }
+  }
+  &__btn-search {
+    background-color: $color-accent;
+    border: 1px solid $color-accent;
+
+    &:hover {
+      background-color: $color-secondary;
+      color: $color-primary;
+    }
+  }
+}

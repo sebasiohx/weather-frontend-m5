@@ -1,0 +1,65 @@
+@use "sass:color";
+@use "variables" as *;
+@use "functions" as *;
+
+@mixin flex-center($direction, $ai: center) {
+  display: flex;
+  justify-content: center;
+  align-items: $ai;
+  flex-direction: $direction;
+}
+
+@mixin theme($light-theme: true) {
+  @if $light-theme {
+    background-color: color.scale($primary-color, $lightness: 100%);
+    color: color.scale($text-color, $lightness: -100%);
+  } @else {
+    background-color: $primary-color;
+    color: $text-color;
+  }
+}
+
+@mixin text-lead($fsz: "lead") {
+  font-size: fsize($fsz);
+  font-weight: weight(light);
+}
+
+@mixin mobile {
+  @media screen and (width <= $mobile) {
+    @content;
+  }
+}
+
+@mixin monitor {
+  @media screen and (width >= $monitor) {
+    @content;
+  }
+}
+
+// color backgrounds
+.bgc-primary {
+  background-color: $color-primary;
+}
+.bgc-primary-light {
+  background-color: $color-primary-light;
+}
+.bgc-secondary {
+  background-color: $color-secondary;
+}
+.bgc-accent {
+  background-color: $color-accent;
+}
+
+// color text
+.tc-primary {
+  color: $color-primary;
+}
+.tc-primary-light {
+  color: $color-primary-light;
+}
+.tc-secondary {
+  color: $color-secondary;
+}
+.tc-accent {
+  color: $color-accent;
+}
