@@ -300,6 +300,7 @@ class ClimaService {
           nombreCiudad: lugar.nombreCiudad,
           img: lugar.img,
           descripcion: lugar.descripcion,
+          unidadMedida: datosCiudadAPI.current_units.temperature_2m,
           climaActual: climaActual,
           pronosticoSemanal: pronosticoSemanal,
         };
