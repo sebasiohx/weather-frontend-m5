@@ -8,14 +8,15 @@
 
 /* lista climas */
 const climas = {
-  soleado: { texto: "soleado", icono: "fa-sun" },
-  nublado: { texto: "nublado", icono: "fa-cloud" },
-  lluvia: { texto: "lluvioso", icono: "fa-cloud-rain" },
-  granizo: { texto: "granizo", icono: "fa-cloud-meatball" },
-  tormenta: { texto: "tormenta", icono: "fa-cloud-bolt" },
-  nocheDespejada: { texto: "noche despejada", icono: "fa-moon" },
-  nocheNublada: { texto: "noche nublada", icono: "fa-cloud-moon" },
-  nocheLluvia: { texto: "noche lluviosa", icono: "fa-cloud-moon-rain" },
+  despejado: { titulo: "despejado", icono: "fa-sun" },
+  nubladoParcial: { titulo: "nublado parcial", icono: "fa-cloud-sun" },
+  nublado: { titulo: "nublado", icono: "fa-cloud" },
+  lluvia: { titulo: "lluvioso", icono: "fa-cloud-rain" },
+  granizo: { titulo: "granizo", icono: "fa-cloud-meatball" },
+  tormenta: { titulo: "tormenta", icono: "fa-cloud-bolt" },
+  nocheDespejada: { titulo: "noche despejada", icono: "fa-moon" },
+  nocheNublada: { titulo: "noche nublada", icono: "fa-cloud-moon" },
+  nocheLluvia: { titulo: "noche lluviosa", icono: "fa-cloud-moon-rain" },
 };
 
 /* ── 00 ── Región de Arica y Parinacota */
@@ -44,70 +45,6 @@ const regionesChile = [
     img: "arica.jpg",
     descripcion:
       "Arica es conocida como 'La Ciudad de la Eterna Primavera' gracias a su clima cálido y soleado durante todo el año. Ubicada en el extremo norte de Chile, limita con Perú y Bolivia, lo que le otorga una rica mezcla cultural. Su costa ofrece playas ideales y es un importante punto de comercio fronterizo.",
-    tempMinima: 16,
-    tempMaxima: 32,
-    tempActual: 27,
-    estadoClimaticoActual: climas.soleado,
-    viento: 18,
-    humedad: 62,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 17,
-        tempMax: 31,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 16,
-        tempMax: 32,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 17,
-        tempMax: 30,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 16,
-        tempMax: 33,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 15,
-        tempMax: 28,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 17,
-        tempMax: 31,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 16,
-        tempMax: 32,
-      },
-    ],
   },
 
   /* ── 1 ── Región de Tarapacá */
@@ -118,70 +55,6 @@ const regionesChile = [
     img: "iquique.jpg",
     descripcion:
       "Iquique es una ciudad costera del norte de Chile famosa por su zona franca ZOFRI y sus extensas playas de arena blanca. Rodeada por el desierto de Atacama y el océano Pacífico, goza de un clima cálido y muy seco prácticamente todo el año. Es además un destino turístico destacado por sus deportes acuáticos y su animada vida nocturna.",
-    tempMinima: 14,
-    tempMaxima: 30,
-    tempActual: 25,
-    estadoClimaticoActual: climas.soleado,
-    viento: 22,
-    humedad: 65,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 15,
-        tempMax: 29,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 14,
-        tempMax: 30,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 15,
-        tempMax: 31,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 13,
-        tempMax: 27,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 15,
-        tempMax: 29,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 14,
-        tempMax: 30,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 15,
-        tempMax: 28,
-      },
-    ],
   },
 
   /* ── 2 ── Región de Antofagasta */
@@ -192,70 +65,6 @@ const regionesChile = [
     img: "antofagasta.jpg",
     descripcion:
       "Antofagasta es la capital minera de Chile, rodeada por el desierto de Atacama, el más árido del mundo. Su economía gira en torno a la extracción del cobre y el litio, recursos fundamentales para el país. Aunque es una ciudad desértica, su costa ofrece una vista impresionante del Pacífico y amaneceres únicos.",
-    tempMinima: 12,
-    tempMaxima: 28,
-    tempActual: 23,
-    estadoClimaticoActual: climas.soleado,
-    viento: 25,
-    humedad: 58,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 13,
-        tempMax: 27,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 12,
-        tempMax: 28,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 11,
-        tempMax: 24,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 13,
-        tempMax: 27,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 12,
-        tempMax: 29,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 13,
-        tempMax: 28,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 11,
-        tempMax: 25,
-      },
-    ],
   },
 
   /* ── 3 ── Región de Atacama */
@@ -266,70 +75,6 @@ const regionesChile = [
     img: "copiapo.jpg",
     descripcion:
       "Copiapó es una ciudad minera enclavada en el corazón del desierto de Atacama, conocida mundialmente por el rescate de los 33 mineros en 2010. Es una ciudad de contrastes: árido desierto de día y cielos estrellados espectaculares de noche. Su valle permite el cultivo de uvas y aceitunas gracias a los ríos que la atraviesan.",
-    tempMinima: 8,
-    tempMaxima: 30,
-    tempActual: 24,
-    estadoClimaticoActual: climas.soleado,
-    viento: 15,
-    humedad: 40,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 9,
-        tempMax: 29,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 8,
-        tempMax: 30,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 10,
-        tempMax: 28,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 8,
-        tempMax: 26,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 9,
-        tempMax: 31,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 10,
-        tempMax: 30,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 8,
-        tempMax: 29,
-      },
-    ],
   },
 
   /* ── 4 ── Región de Coquimbo */
@@ -340,70 +85,6 @@ const regionesChile = [
     img: "laserena.jpg",
     descripcion:
       "La Serena es una de las ciudades más antiguas de Chile, famosa por su arquitectura colonial y sus largas playas de arena. Su clima templado y sus cielos despejados la convierten en un destino astronómico de primer nivel, albergando varios observatorios internacionales. El Valle del Elqui, célebre por sus piscos y viñedos, se extiende justo al interior de la ciudad.",
-    tempMinima: 10,
-    tempMaxima: 26,
-    tempActual: 21,
-    estadoClimaticoActual: climas.soleado,
-    viento: 20,
-    humedad: 55,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 11,
-        tempMax: 25,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 10,
-        tempMax: 26,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 9,
-        tempMax: 22,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 10,
-        tempMax: 24,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 11,
-        tempMax: 25,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 9,
-        tempMax: 21,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 10,
-        tempMax: 24,
-      },
-    ],
   },
 
   /* ── 5 ── Región de Valparaíso */
@@ -414,70 +95,6 @@ const regionesChile = [
     img: "valparaiso.jpg",
     descripcion:
       "Valparaíso es una ciudad puerto icónica, declarada Patrimonio de la Humanidad por la UNESCO gracias a su arquitectura bohemia y sus coloridos cerros. Es la sede del Congreso Nacional de Chile y uno de los principales puertos de la costa del Pacífico sur. Su vibrante escena cultural, murales urbanos y ascensores históricos la hacen única en el mundo.",
-    tempMinima: 9,
-    tempMaxima: 22,
-    tempActual: 18,
-    estadoClimaticoActual: climas.nublado,
-    viento: 30,
-    humedad: 70,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 9,
-        tempMax: 21,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 10,
-        tempMax: 22,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 8,
-        tempMax: 19,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 7,
-        tempMax: 16,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 8,
-        tempMax: 18,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 10,
-        tempMax: 21,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 9,
-        tempMax: 20,
-      },
-    ],
   },
 
   /* ── 6 ── Región Metropolitana de Santiago */
@@ -488,70 +105,6 @@ const regionesChile = [
     img: "santiago.jpg",
     descripcion:
       "Santiago es la capital y el corazón político, económico y cultural de Chile, albergando a más de 7 millones de personas en su área metropolitana. Enclavada entre la cordillera de los Andes y la cordillera de la Costa, ofrece paisajes impresionantes especialmente en invierno con las cumbres nevadas. Su clima mediterráneo con veranos secos e inviernos con lluvia moderada la convierte en una ciudad muy vivible.",
-    tempMinima: 8,
-    tempMaxima: 28,
-    tempActual: 22,
-    estadoClimaticoActual: climas.soleado,
-    viento: 14,
-    humedad: 50,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 9,
-        tempMax: 27,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 8,
-        tempMax: 28,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 7,
-        tempMax: 23,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 6,
-        tempMax: 18,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 8,
-        tempMax: 21,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 9,
-        tempMax: 26,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 10,
-        tempMax: 27,
-      },
-    ],
   },
 
   /* ── 7 ── Región del Libertador General Bernardo O'Higgins */
@@ -562,70 +115,6 @@ const regionesChile = [
     img: "rancagua.jpg",
     descripcion:
       "Rancagua es una ciudad de tradición huasa y agrícola, ubicada en el fértil Valle Central de Chile. Es reconocida por albergar El Teniente, la mina de cobre subterránea más grande del mundo, operada por Codelco. Sus rodeos, chinganas y festividades criollas la convierten en un símbolo de la identidad campesina chilena.",
-    tempMinima: 6,
-    tempMaxima: 27,
-    tempActual: 20,
-    estadoClimaticoActual: climas.soleado,
-    viento: 12,
-    humedad: 52,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 7,
-        tempMax: 26,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 6,
-        tempMax: 27,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 5,
-        tempMax: 22,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 5,
-        tempMax: 19,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 7,
-        tempMax: 24,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 8,
-        tempMax: 26,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 4,
-        tempMax: 17,
-      },
-    ],
   },
 
   /* ── 8 ── Región del Maule */
@@ -636,70 +125,6 @@ const regionesChile = [
     img: "talca.jpg",
     descripcion:
       "Talca es una ciudad universitaria y agroindustrial, corazón de una de las zonas vitivinícolas más importantes de Chile. El río Maule y sus alrededores ofrecen paisajes de valles, viñedos y termas que atraen a visitantes durante todo el año. Reconstruida tras el terremoto de 2010, la ciudad combina su historia colonial con una arquitectura moderna.",
-    tempMinima: 5,
-    tempMaxima: 25,
-    tempActual: 18,
-    estadoClimaticoActual: climas.nublado,
-    viento: 16,
-    humedad: 65,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 6,
-        tempMax: 24,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 7,
-        tempMax: 25,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 4,
-        tempMax: 16,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 5,
-        tempMax: 18,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 6,
-        tempMax: 23,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 4,
-        tempMax: 17,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 3,
-        tempMax: 15,
-      },
-    ],
   },
 
   /* ── 9 ── Región de Ñuble */
@@ -709,71 +134,7 @@ const regionesChile = [
     nombreCiudad: "Chillán",
     img: "chillan.jpg",
     descripcion:
-      "Chillán es una ciudad cargada de historia y cultura popular, cuna del prócer Bernardo O'Higgins y del muralista mexicano David Alfaro Siqueiros. Es famosa por su mercado artesanal, uno de los más coloridos del país, y por sus afamadas longanizas y dulces tradicionales. Además, el cercano volcán Chillán ofrece un centro de ski y termas de alta categoría.",
-    tempMinima: 4,
-    tempMaxima: 23,
-    tempActual: 16,
-    estadoClimaticoActual: climas.nublado,
-    viento: 18,
-    humedad: 70,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 5,
-        tempMax: 22,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 3,
-        tempMax: 14,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 4,
-        tempMax: 17,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 5,
-        tempMax: 22,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 3,
-        tempMax: 16,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 2,
-        tempMax: 13,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 4,
-        tempMax: 18,
-      },
-    ],
+      "Chillán es una ciudad cargada de historia y cultura popular, cuna del prócer Bernardo O'Higgins y del muralista mexicano David Alfaro Siqueiros. Es famosa por su mercado artesanal, uno de los más coloridos del país, y por sus afamadas longanizas y dulces tradicionales. El cercano volcán Chillán ofrece además un centro de ski y termas de alta categoría.",
   },
 
   /* ── 10 ── Región del Biobío */
@@ -783,71 +144,7 @@ const regionesChile = [
     nombreCiudad: "Concepción",
     img: "concepcion.jpg",
     descripcion:
-      "Concepción es la segunda ciudad más grande de Chile y un importante polo universitario e industrial del país. Ubicada a orillas del río Biobío, la ciudad es conocida por su activa escena cultural, musical y gastronómica. Su clima lluvioso y su entorno de bosques nativos le dan un carácter verde y fresco que la distingue del resto del país.",
-    tempMinima: 4,
-    tempMaxima: 20,
-    tempActual: 14,
-    estadoClimaticoActual: climas.nublado,
-    viento: 22,
-    humedad: 75,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 3,
-        tempMax: 14,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 4,
-        tempMax: 17,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 3,
-        tempMax: 13,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 5,
-        tempMax: 18,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.soleado,
-        climaNoche: climas.nocheDespejada,
-        tempMin: 6,
-        tempMax: 20,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 4,
-        tempMax: 16,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 2,
-        tempMax: 12,
-      },
-    ],
+      "Concepción es la segunda ciudad más grande de Chile y un importante polo universitario e industrial del país. Ubicada a orillas del río Biobío, es conocida por su activa escena cultural, musical y gastronómica. Su clima lluvioso y su entorno de bosques nativos le dan un carácter verde y fresco que la distingue del resto del país.",
   },
 
   /* ── 11 ── Región de La Araucanía */
@@ -858,70 +155,6 @@ const regionesChile = [
     img: "temuco.jpg",
     descripcion:
       "Temuco es la puerta de entrada a La Araucanía, tierra del pueblo mapuche, cuya cultura y cosmovisión impregnan toda la región. Es una ciudad dinámica y comercial, rodeada de volcanes, lagos y bosques milenarios de araucarias. Su mercado La Recova y su feria agropecuaria son reconocidos como los más grandes del sur de Chile.",
-    tempMinima: 3,
-    tempMaxima: 18,
-    tempActual: 12,
-    estadoClimaticoActual: climas.nublado,
-    viento: 24,
-    humedad: 80,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 2,
-        tempMax: 12,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 3,
-        tempMax: 15,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 1,
-        tempMax: 11,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 3,
-        tempMax: 14,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 4,
-        tempMax: 16,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 1,
-        tempMax: 10,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.tormenta,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 0,
-        tempMax: 9,
-      },
-    ],
   },
 
   /* ── 12 ── Región de Los Ríos */
@@ -931,71 +164,7 @@ const regionesChile = [
     nombreCiudad: "Valdivia",
     img: "valdivia.jpg",
     descripcion:
-      "Valdivia es una ciudad fluvial fundada por los españoles en 1552, bañada por varios ríos que convergen en su centro y desembocan en el Pacífico. Es conocida por su arquitectura de influencia alemana, su excelente cerveza artesanal y su bulliciosa costanera llena de lobos marinos. La fuerte tradición lluviosa de la zona le ha dado el apodo de 'La ciudad de la lluvia'.",
-    tempMinima: 2,
-    tempMaxima: 17,
-    tempActual: 11,
-    estadoClimaticoActual: climas.lluvia,
-    viento: 20,
-    humedad: 88,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 2,
-        tempMax: 13,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 1,
-        tempMax: 11,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 3,
-        tempMax: 15,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 1,
-        tempMax: 12,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.tormenta,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 0,
-        tempMax: 10,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 2,
-        tempMax: 14,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 1,
-        tempMax: 11,
-      },
-    ],
+      "Valdivia es una ciudad fluvial fundada por los españoles en 1552, bañada por varios ríos que convergen en su centro y desembocan en el Pacífico. Es conocida por su arquitectura de influencia alemana, su excelente cerveza artesanal y su bulliciosa costanera llena de lobos marinos. Su tradición lluviosa le ha dado el apodo de 'La ciudad de la lluvia'.",
   },
 
   /* ── 13 ── Región de Los Lagos */
@@ -1006,70 +175,6 @@ const regionesChile = [
     img: "puertomontt.jpg",
     descripcion:
       "Puerto Montt es la puerta de entrada a la Patagonia chilena, una ciudad portuaria rodeada de volcanes, fiordos y lagos de aguas turquesas. Es el principal polo de la industria salmonera de Chile y de Sudamérica, con un puerto de gran actividad comercial y turística. Su feria artesanal de Angelmo es famosa por sus mariscos frescos y artesanías en madera de alerce.",
-    tempMinima: 1,
-    tempMaxima: 14,
-    tempActual: 9,
-    estadoClimaticoActual: climas.lluvia,
-    viento: 35,
-    humedad: 85,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 1,
-        tempMax: 12,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.tormenta,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 0,
-        tempMax: 9,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 2,
-        tempMax: 13,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 1,
-        tempMax: 11,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: 0,
-        tempMax: 10,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 2,
-        tempMax: 13,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.tormenta,
-        climaNoche: climas.nocheLluvia,
-        tempMin: -1,
-        tempMax: 8,
-      },
-    ],
   },
 
   /* ── 14 ── Región de Aysén */
@@ -1079,71 +184,7 @@ const regionesChile = [
     nombreCiudad: "Coyhaique",
     img: "coyhaique.jpg",
     descripcion:
-      "Coyhaique es la ciudad más austral de carácter urbano de Chile antes de la Patagonia extrema, rodeada de una naturaleza salvaje y prístina. Es el centro de servicios de la Región de Aysén, conocida por sus ríos de clase mundial para la pesca deportiva y sus impresionantes parques nacionales. Su acceso remoto por la Carretera Austral la convierte en un destino de aventura para viajeros de todo el mundo.",
-    tempMinima: -1,
-    tempMaxima: 12,
-    tempActual: 7,
-    estadoClimaticoActual: climas.nublado,
-    viento: 40,
-    humedad: 82,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: -1,
-        tempMax: 10,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 0,
-        tempMax: 11,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.granizo,
-        climaNoche: climas.nocheLluvia,
-        tempMin: -2,
-        tempMax: 7,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: -1,
-        tempMax: 9,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 1,
-        tempMax: 12,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.tormenta,
-        climaNoche: climas.nocheLluvia,
-        tempMin: -2,
-        tempMax: 6,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: -1,
-        tempMax: 8,
-      },
-    ],
+      "Coyhaique es el centro de servicios de la Región de Aysén, rodeada de una naturaleza salvaje y prístina en plena Patagonia. Es conocida por sus ríos de clase mundial para la pesca deportiva y sus impresionantes parques nacionales de acceso remoto. La Carretera Austral, que atraviesa la región, la convierte en un destino de aventura para viajeros de todo el mundo.",
   },
 
   /* ── 15 ── Región de Magallanes y de la Antártica Chilena */
@@ -1153,70 +194,124 @@ const regionesChile = [
     nombreCiudad: "Punta Arenas",
     img: "puntaarenas.jpg",
     descripcion:
-      "Punta Arenas es la ciudad más austral del mundo de más de 100.000 habitantes, ubicada a orillas del estrecho de Magallanes en la Patagonia extrema. Fue un importante enclave durante la era del oro y de la lana ovina, y hoy es la puerta de entrada a la Antártica chilena y a la Tierra del Fuego. Sus vientos persistentes, sus pingüineras y su cielo nocturno de estrellas del hemisferio sur son experiencias únicas en el planeta.",
-    tempMinima: -2,
-    tempMaxima: 10,
-    tempActual: 5,
-    estadoClimaticoActual: climas.nublado,
-    viento: 55,
-    humedad: 78,
-    pronosticoSemanal: [
-      {
-        nombreDia: "lunes",
-        siglas: "lun",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: -1,
-        tempMax: 9,
-      },
-      {
-        nombreDia: "martes",
-        siglas: "mar",
-        climaDia: climas.granizo,
-        climaNoche: climas.nocheLluvia,
-        tempMin: -2,
-        tempMax: 6,
-      },
-      {
-        nombreDia: "miércoles",
-        siglas: "mie",
-        climaDia: climas.tormenta,
-        climaNoche: climas.nocheLluvia,
-        tempMin: -2,
-        tempMax: 5,
-      },
-      {
-        nombreDia: "jueves",
-        siglas: "jue",
-        climaDia: climas.lluvia,
-        climaNoche: climas.nocheLluvia,
-        tempMin: -1,
-        tempMax: 8,
-      },
-      {
-        nombreDia: "viernes",
-        siglas: "vie",
-        climaDia: climas.nublado,
-        climaNoche: climas.nocheNublada,
-        tempMin: 0,
-        tempMax: 9,
-      },
-      {
-        nombreDia: "sábado",
-        siglas: "sab",
-        climaDia: climas.granizo,
-        climaNoche: climas.nocheLluvia,
-        tempMin: -2,
-        tempMax: 5,
-      },
-      {
-        nombreDia: "domingo",
-        siglas: "dom",
-        climaDia: climas.tormenta,
-        climaNoche: climas.nocheLluvia,
-        tempMin: -2,
-        tempMax: 4,
-      },
-    ],
+      "Punta Arenas es la ciudad más austral del mundo de más de 100.000 habitantes, ubicada a orillas del estrecho de Magallanes en la Patagonia extrema. Fue un importante enclave durante la era del oro y de la lana ovina, y hoy es la puerta de entrada a la Antártica chilena y a la Tierra del Fuego. Sus pingüineras, vientos persistentes y cielos estrellados del hemisferio sur son experiencias únicas en el planeta.",
   },
 ];
+
+class ClimaService {
+  constructor(listaLugares) {
+    this.listaLugares = listaLugares;
+    this.unidadTemperatura =
+      sessionStorage.getItem("unidadTemperatura") ?? "celsius";
+    this.dataClimaLugares = {};
+  }
+
+  cambiarUnidadTemp(nuevaUnidad) {
+    sessionStorage.setItem("unidadTemperatura", nuevaUnidad);
+
+    Object.keys(sessionStorage)
+      .filter((clave) => clave.startsWith("clima_"))
+      .forEach((clave) => sessionStorage.removeItem(clave));
+
+    location.reload();
+  }
+
+  async obtenerCoordenadas(nombreCiudad) {
+    try {
+      const respuestaGeo = await fetch(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${nombreCiudad}&country=CL&count=1`,
+      );
+
+      if (!respuestaGeo.ok) throw new Error(`Error ${respuestaGeo.status}`);
+
+      const datosGeo = await respuestaGeo.json();
+
+      //0: latitud 1:longitud
+      return [datosGeo.results[0].latitude, datosGeo.results[0].longitude];
+    } catch (error) {
+      console.error("Falló la petición:", error.message);
+      return null;
+    }
+  }
+
+  async obtenerClima(latitud, longitud) {
+    const claveSesion = `clima_${latitud}_${longitud}`;
+
+    try {
+      // 1. consultar si estan los datos en Storage
+      const datosEnCache = sessionStorage.getItem(claveSesion);
+
+      if (datosEnCache) {
+        return JSON.parse(datosEnCache);
+      }
+
+      // 2. si no estan en el Storage, traer los datos desde la API
+      const respuestaClima = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitud}&longitude=${longitud}&daily=temperature_2m_max,temperature_2m_min,weather_code,temperature_2m_mean,precipitation_probability_mean&current=temperature_2m,relative_humidity_2m,cloud_cover,wind_speed_10m,is_day,weather_code&timezone=auto&temperature_unit=${this.unidadTemperatura}`,
+      );
+
+      if (!respuestaClima.ok) throw new Error(`Error ${respuestaClima.status}`);
+
+      const datosClima = await respuestaClima.json();
+
+      // 3. guardar los datos de la API en el Storage
+      sessionStorage.setItem(claveSesion, JSON.stringify(datosClima));
+
+      return datosClima;
+    } catch (error) {
+      console.error("Falló la petición:", error.message);
+      return null;
+    }
+  }
+
+  async cargarLugares() {
+    const listaDatos = await Promise.all(
+      this.listaLugares.map(async (lugar) => {
+        const coordenadas = await this.obtenerCoordenadas(lugar.nombreCiudad);
+        if (!coordenadas) return null;
+
+        const [latitud, longitud] = coordenadas;
+        const datosCiudadAPI = await this.obtenerClima(latitud, longitud);
+
+        const { current, daily } = datosCiudadAPI;
+
+        const climaActual = {
+          fecha: current.time,
+          tempActual: Math.round(current.temperature_2m),
+          humedad: Math.round(current.relative_humidity_2m),
+          coberturaNubes: current.cloud_cover,
+          viento: Math.round(current.wind_speed_10m),
+          esDeDia: current.is_day === 1 ? true : false,
+          clima: current.weather_code,
+        };
+
+        const pronosticoSemanal = {
+          fechas: daily.time.map((d) => d.replaceAll("-", "/")),
+          tempMaxima: daily.temperature_2m_max.map((t) => Math.round(t)),
+          tempMinima: daily.temperature_2m_min.map((t) => Math.round(t)),
+          clima: daily.weather_code,
+          tempMedia: daily.temperature_2m_mean.map((t) => Math.round(t)),
+          probPrecipitacion: daily.precipitation_probability_mean,
+        };
+
+        return {
+          id: lugar.id,
+          nombreRegion: lugar.nombreRegion,
+          nombreCiudad: lugar.nombreCiudad,
+          img: lugar.img,
+          descripcion: lugar.descripcion,
+          climaActual: climaActual,
+          pronosticoSemanal: pronosticoSemanal,
+        };
+      }),
+    );
+
+    this.dataClimaLugares = listaDatos;
+    return this.dataClimaLugares;
+  }
+}
+
+const climaChile = new ClimaService(regionesChile);
+climaChile.cargarLugares().then((resultado) => {
+  console.dir(resultado);
+});
