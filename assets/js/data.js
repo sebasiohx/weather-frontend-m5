@@ -13,6 +13,7 @@ const climas = {
   nublado: { titulo: "nublado", icono: "fa-cloud" },
   lluvia: { titulo: "lluvioso", icono: "fa-cloud-rain" },
   granizo: { titulo: "granizo", icono: "fa-cloud-meatball" },
+  nevada: { titulo: "nevada", icono: "fa-snowflake" },
   tormenta: { titulo: "tormenta", icono: "fa-cloud-bolt" },
   nocheDespejada: { titulo: "noche despejada", icono: "fa-moon" },
   nocheNublada: { titulo: "noche nublada", icono: "fa-cloud-moon" },
@@ -201,19 +202,10 @@ const regionesChile = [
 class ClimaService {
   constructor(listaLugares) {
     this.listaLugares = listaLugares;
+    this.dataClimaLugares = [];
+    this.dataLugarDetalle = {};
     this.unidadTemperatura =
       sessionStorage.getItem("unidadTemperatura") ?? "celsius";
-    this.dataClimaLugares = {};
-  }
-
-  cambiarUnidadTemp(nuevaUnidad) {
-    sessionStorage.setItem("unidadTemperatura", nuevaUnidad);
-
-    Object.keys(sessionStorage)
-      .filter((clave) => clave.startsWith("clima_"))
-      .forEach((clave) => sessionStorage.removeItem(clave));
-
-    location.reload();
   }
 
   async obtenerCoordenadas(nombreCiudad) {
@@ -229,7 +221,7 @@ class ClimaService {
       //0: latitud 1:longitud
       return [datosGeo.results[0].latitude, datosGeo.results[0].longitude];
     } catch (error) {
-      console.error("Falló la petición:", error.message);
+      console.error("Falló la petición a las coordenadas:", error.message);
       return null;
     }
   }
@@ -259,7 +251,7 @@ class ClimaService {
 
       return datosClima;
     } catch (error) {
-      console.error("Falló la petición:", error.message);
+      console.error("Falló la petición al clima:", error.message);
       return null;
     }
   }
@@ -272,26 +264,20 @@ class ClimaService {
 
         const [latitud, longitud] = coordenadas;
         const datosCiudadAPI = await this.obtenerClima(latitud, longitud);
+        if (!datosCiudadAPI) return null;
 
         const { current, daily } = datosCiudadAPI;
 
         const climaActual = {
           fecha: current.time,
           tempActual: Math.round(current.temperature_2m),
-          humedad: Math.round(current.relative_humidity_2m),
-          coberturaNubes: current.cloud_cover,
-          viento: Math.round(current.wind_speed_10m),
           esDeDia: current.is_day === 1 ? true : false,
           clima: current.weather_code,
         };
 
         const pronosticoSemanal = {
-          fechas: daily.time.map((d) => d.replaceAll("-", "/")),
-          tempMaxima: daily.temperature_2m_max.map((t) => Math.round(t)),
-          tempMinima: daily.temperature_2m_min.map((t) => Math.round(t)),
-          clima: daily.weather_code,
-          tempMedia: daily.temperature_2m_mean.map((t) => Math.round(t)),
-          probPrecipitacion: daily.precipitation_probability_mean,
+          tempMaxima: Math.round(daily.temperature_2m_max[0]),
+          tempMinima: Math.round(daily.temperature_2m_min[0]),
         };
 
         return {
@@ -299,7 +285,6 @@ class ClimaService {
           nombreRegion: lugar.nombreRegion,
           nombreCiudad: lugar.nombreCiudad,
           img: lugar.img,
-          descripcion: lugar.descripcion,
           unidadMedida: datosCiudadAPI.current_units.temperature_2m,
           climaActual: climaActual,
           pronosticoSemanal: pronosticoSemanal,
@@ -310,9 +295,177 @@ class ClimaService {
     this.dataClimaLugares = listaDatos;
     return this.dataClimaLugares;
   }
+
+  async cargarDetalleLugar(id) {
+    if (id > this.listaLugares.length - 1) {
+      console.error("Id de ciudad invalido");
+      return;
+    }
+    const lugarSeleccionado = this.listaLugares.find(
+      (ciudad) => ciudad.id === id,
+    );
+
+    const coordenadasCiudad = await this.obtenerCoordenadas(
+      lugarSeleccionado.nombreCiudad,
+    );
+    if (!coordenadasCiudad) return null;
+
+    const [latitud, longitud] = coordenadasCiudad;
+    const datosCiudadAPI = await this.obtenerClima(latitud, longitud);
+    if (!datosCiudadAPI) return null;
+
+    const { current, daily } = datosCiudadAPI;
+
+    const climaActual = {
+      fecha: current.time,
+      tempActual: Math.round(current.temperature_2m),
+      humedad: Math.round(current.relative_humidity_2m),
+      coberturaNubes: current.cloud_cover,
+      viento: Math.round(current.wind_speed_10m),
+      esDeDia: current.is_day === 1 ? true : false,
+      clima: current.weather_code,
+    };
+
+    const pronosticoSemanal = {
+      fechas: daily.time.map((d) => d.replaceAll("-", "/")),
+      tempMaximas: daily.temperature_2m_max.map((t) => Math.round(t)),
+      tempMinimas: daily.temperature_2m_min.map((t) => Math.round(t)),
+      climas: daily.weather_code,
+      tempMedias: daily.temperature_2m_mean.map((t) => Math.round(t)),
+      probPrecipitacion: daily.precipitation_probability_mean,
+    };
+
+    this.dataLugarDetalle = {
+      id: lugarSeleccionado.id,
+      nombreRegion: lugarSeleccionado.nombreRegion,
+      nombreCiudad: lugarSeleccionado.nombreCiudad,
+      img: lugarSeleccionado.img,
+      descripcion: lugarSeleccionado.descripcion,
+      unidadMedida: datosCiudadAPI.current_units.temperature_2m,
+      climaActual: climaActual,
+      pronosticoSemanal: pronosticoSemanal,
+    };
+
+    return this.dataLugarDetalle;
+  }
+
+  cambiarUnidadTemp(nuevaUnidad) {
+    if (!["celsius", "fahrenheit"].includes(nuevaUnidad)) {
+      console.error("Unidad de temperatura invalida");
+      return;
+    }
+    sessionStorage.setItem("unidadTemperatura", nuevaUnidad);
+
+    Object.keys(sessionStorage)
+      .filter((clave) => clave.startsWith("clima_"))
+      .forEach((clave) => sessionStorage.removeItem(clave));
+
+    location.reload();
+  }
+
+  calcularEstadisticas(lugar) {
+    const pronostico = lugar.pronosticoSemanal ?? null;
+    if (pronostico === null) {
+      console.error(
+        "Error al calcular las estadísticas, el pronóstico es null",
+      );
+      return;
+    }
+
+    const menorTempMin = Math.min(...pronostico.tempMinimas);
+    const mayorTempMax = Math.max(...pronostico.tempMaximas);
+
+    const sumaTemperaturas = pronostico.tempMedias.reduce(
+      (acc, numActual) => acc + numActual,
+      0,
+    );
+
+    const promedioTemp = Math.floor(
+      sumaTemperaturas / pronostico.tempMedias.length,
+    );
+
+    const conteoTemporalClimas = pronostico.climas.reduce((acc, codigo) => {
+      if (!acc[codigo]) {
+        acc[codigo] = {
+          codigoClima: codigo,
+          cantidadDias: 0,
+        };
+      }
+      acc[codigo].cantidadDias += 1;
+      return acc;
+    }, {});
+
+    // transforma un objeto en un array de objetos sin las claves
+    const diasPorClima = Object.values(conteoTemporalClimas);
+
+    const climaMasRepetido = diasPorClima.reduce(
+      (max, clima) => {
+        return clima.cantidadDias > max.cantidadDias ? clima : max;
+      },
+      { codigoClima: null, cantidadDias: 0 },
+    );
+
+    const sumaTempMax = pronostico.tempMaximas.reduce(
+      (acc, num) => acc + num,
+      0,
+    );
+    const promedioTempMax = Math.ceil(
+      sumaTempMax / pronostico.tempMaximas.length,
+    );
+
+    const crearFraseResumen = () => {
+      const nivelesTemperatura = {
+        muyFria: { max: 8, texto: "muy fría" },
+        fria: { max: 17, texto: "fría" },
+        templada: { max: 24, texto: "templada" },
+        calurosa: { max: 50, texto: "calurosa" },
+      };
+
+      const listaNiveles = Object.values(nivelesTemperatura);
+      // destructuring de la propiedad 'texto' del objeto que devuelve find()
+      const { texto: nivelClima } = listaNiveles.find(
+        ({ max }) => promedioTempMax <= max,
+      );
+
+      const { codigoClima } = climaMasRepetido;
+
+      const traducirCodigoClima = (codigo) => {
+        let textoClima = "";
+        if (codigo === 0) textoClima = "despejada";
+        if ([1, 2].includes(codigo)) textoClima = "con nubosidad parcial";
+        if (codigo === 3) textoClima = "nublada";
+        if (
+          [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(codigo)
+        )
+          textoClima = "con lluvias";
+        if (codigo === 77) textoClima = "con granizo";
+        if ([71, 73, 75, 85, 86].includes(codigo)) textoClima = "con nevadas";
+        if ([95, 96, 99].includes(codigo)) textoClima = "con tormentas";
+
+        return textoClima;
+      };
+
+      return `Semana ${nivelClima} mayormente ${traducirCodigoClima(codigoClima)}`;
+    };
+
+    return {
+      menorTempMin: menorTempMin,
+      mayorTempMax: mayorTempMax,
+      tempPromedio: promedioTemp,
+      diasPorClima: diasPorClima,
+      climaMasRepetido: climaMasRepetido,
+      fraseResumenClima: crearFraseResumen(),
+    };
+  }
 }
 
-const climaChile = new ClimaService(regionesChile);
+/* const climaChile = new ClimaService(regionesChile);
+
 climaChile.cargarLugares().then((resultado) => {
   console.dir(resultado);
 });
+
+climaChile.cargarDetalleLugar(15).then((resultado) => {
+  console.dir(resultado);
+  console.dir(climaChile.calcularEstadisticas(resultado));
+}); */
