@@ -459,13 +459,22 @@ class ClimaService {
   }
 }
 
-/* const climaChile = new ClimaService(regionesChile);
+const climaChile = new ClimaService(regionesChile);
 
 climaChile.cargarLugares().then((resultado) => {
-  console.dir(resultado);
+  console.log("Lista lugares:", resultado);
 });
 
-climaChile.cargarDetalleLugar(15).then((resultado) => {
-  console.dir(resultado);
-  console.dir(climaChile.calcularEstadisticas(resultado));
-}); */
+climaChile.cargarDetalleLugar(6).then((resultado) => {
+  console.log("Detalle lugar:", resultado);
+  console.log(
+    "Estadisticas detalle:",
+    climaChile.calcularEstadisticas(resultado),
+  );
+});
+
+async function testApi(app) {
+  console.log(app);
+}
+
+testApi(climaChile);
