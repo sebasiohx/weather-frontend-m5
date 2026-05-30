@@ -1,14 +1,18 @@
 @use "../abstracts" as *;
 
 %width-column {
-  width: 55px;
+  width: 88px;
+
+  @include mobile {
+    width: 85px;
+  }
 }
 
 .forecast {
   &__list-item {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     border: 1px solid $color-primary-light;
 
     &--home {

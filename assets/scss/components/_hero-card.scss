@@ -18,14 +18,19 @@
     margin-bottom: 0;
   }
 
+  &__unit {
+    font-size: fsize("title");
+  }
+
   &__date {
-    @include text-lead($fsz: "big");
+    @include text-lead($fsz: "regular");
     margin-bottom: 1rem;
   }
 
   &__btn-action {
     background-color: $color-primary;
     color: $color-text-1;
+    width: auto;
 
     &:hover {
       background-color: $color-primary-light;
@@ -33,6 +38,15 @@
       transition:
         background 300ms,
         border 600ms;
+    }
+  }
+
+  @include mobile {
+    &__unit {
+      font-size: fsize("lead");
+    }
+    &__btn-action {
+      width: 100%;
     }
   }
 }

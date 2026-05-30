@@ -50,13 +50,18 @@
 }
 
 .forecast__temperatures, .forecast__climates, .forecast__day {
-  width: 55px;
+  width: 88px;
+}
+@media screen and (width <= 767px) {
+  .forecast__temperatures, .forecast__climates, .forecast__day {
+    width: 85px;
+  }
 }
 
 .forecast__list-item {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   border: 1px solid #97eaff;
 }
 .forecast__list-item--home {
@@ -90,19 +95,31 @@
   font-weight: 300;
   margin-bottom: 0;
 }
+.hero-card__unit {
+  font-size: 2.25rem;
+}
 .hero-card__date {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 300;
   margin-bottom: 1rem;
 }
 .hero-card__btn-action {
   background-color: #2fd5ff;
   color: #272727;
+  width: auto;
 }
 .hero-card__btn-action:hover {
   background-color: #97eaff;
   border-color: rgb(0, 156.6625, 196.3);
   transition: background 300ms, border 600ms;
+}
+@media screen and (width <= 767px) {
+  .hero-card__unit {
+    font-size: 1.25rem;
+  }
+  .hero-card__btn-action {
+    width: 100%;
+  }
 }
 
 .regions-card {

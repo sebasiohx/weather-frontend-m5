@@ -363,11 +363,10 @@ class ClimaService {
     location.reload();
   }
 
-  calcularEstadisticas(lugar) {
-    const pronostico = lugar.pronosticoSemanal ?? null;
-    if (pronostico === null) {
+  calcularEstadisticas(pronostico) {
+    if (!pronostico) {
       console.error(
-        "Error al calcular las estadísticas, el pronóstico es null",
+        "Error al calcular las estadísticas, falta agregar un pronóstico",
       );
       return;
     }
@@ -469,7 +468,7 @@ climaChile.cargarDetalleLugar(6).then((resultado) => {
   console.log("Detalle lugar:", resultado);
   console.log(
     "Estadisticas detalle:",
-    climaChile.calcularEstadisticas(resultado),
+    climaChile.calcularEstadisticas(resultado.pronosticoSemanal),
   );
 });
 
