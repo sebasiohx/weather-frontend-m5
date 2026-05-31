@@ -7,9 +7,15 @@
   &__input {
     border: 1px solid $color-accent;
     color: $color-accent;
+    max-width: 214px;
 
     &--error {
-      border: 1px solid red;
+      background-color: red;
+      position: absolute;
+      bottom: -21px;
+      color: $color-bg;
+      padding: 2px;
+      margin: 0;
     }
   }
   &__btn-search {

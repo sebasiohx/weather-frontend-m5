@@ -287,8 +287,8 @@ function crearCard(lugar) {
   return col;
 }
 
-// Funcion para renderizar todas las cards
-async function rendeizarListaCards(listaLugares) {
+// Funcion que devuelve un loading como elemento HTML
+function mostrarLoading() {
   const divContainer = document.createElement("div");
   divContainer.className = "d-flex justify-content-center";
   const divSpinner = document.createElement("div");
@@ -303,7 +303,12 @@ async function rendeizarListaCards(listaLugares) {
   divSpinner.append(spanLoading);
   divContainer.append(divSpinner);
 
-  regionesContainer.append(divContainer);
+  return divContainer;
+}
+
+// Funcion para renderizar todas las cards
+async function rendeizarListaCards(listaLugares) {
+  regionesContainer.append(mostrarLoading());
 
   const lugares = await listaLugares;
   regionesContainer.textContent = "";
@@ -314,7 +319,62 @@ async function rendeizarListaCards(listaLugares) {
   }
 }
 
+// Función para buscar
+async function buscarLugar() {
+  const textoInput = inputBusqueda.value.trim().toLowerCase();
+
+  // para reiniciar el listado o si no los datos se van acumulando
+  regionesContainer.textContent = "";
+  regionesContainer.append(mostrarLoading());
+
+  const lista = await climaChileApp.cargarLugares();
+
+  const listaFiltrada = lista.filter((lugar) => {
+    return lugar.nombreCiudad.toLowerCase().includes(textoInput);
+  });
+
+  if (listaFiltrada.length === 0) {
+    const mensajeSinResultado = document.createElement("h3");
+    mensajeSinResultado.textContent = `No se encontraron resultados para "${inputBusqueda.value}"`;
+    regionesContainer.append(mensajeSinResultado);
+    return;
+  }
+
+  rendeizarListaCards(listaFiltrada);
+}
+
 /* Eventos */
+// evento buscador
+formularioBusqueda.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  if (!inputBusqueda.value) {
+    console.error("Ingrese una ciudad válida");
+    inputBusqueda.classList.add("is-invalid");
+    return;
+  } else {
+    inputBusqueda.classList.remove("is-invalid");
+  }
+
+  //mostrarHome();
+
+  vistaHome.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+
+  buscarLugar();
+});
+
+// evento para que al dejar el input vacio se vuelvan a renderizar todas las cards
+inputBusqueda.addEventListener("input", (e) => {
+  if (!inputBusqueda.value) {
+    regionesContainer.textContent = "";
+    rendeizarListaCards(climaChileApp.cargarLugares());
+  }
+});
+
+// evento click en alguna card
 regionesContainer.addEventListener("click", (e) => {
   const card = e.target.closest(".regions-card");
   // guardian

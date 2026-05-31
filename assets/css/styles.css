@@ -138,6 +138,7 @@
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   overflow: hidden;
+  margin-bottom: 0;
 }
 .regions-card__image {
   height: 200px;
@@ -187,9 +188,15 @@
 .nav-weather__input {
   border: 1px solid #243870;
   color: #243870;
+  max-width: 214px;
 }
 .nav-weather__input--error {
-  border: 1px solid red;
+  background-color: red;
+  position: absolute;
+  bottom: -21px;
+  color: #fff;
+  padding: 2px;
+  margin: 0;
 }
 .nav-weather__btn-search {
   background-color: #243870;
