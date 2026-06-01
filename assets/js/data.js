@@ -9,9 +9,9 @@
 /* lista climas */
 const climas = {
   despejado: { titulo: "despejado", icono: "fa-sun" },
-  nubladoParcial: { titulo: "nublado parcial", icono: "fa-cloud-sun" },
+  nubladoParcial: { titulo: "nub. parcial", icono: "fa-cloud-sun" },
   nublado: { titulo: "nublado", icono: "fa-cloud" },
-  lluvia: { titulo: "lluvioso", icono: "fa-cloud-rain" },
+  lluvia: { titulo: "lluvias", icono: "fa-cloud-rain" },
   granizo: { titulo: "granizo", icono: "fa-cloud-meatball" },
   nevada: { titulo: "nevada", icono: "fa-snowflake" },
   tormenta: { titulo: "tormenta", icono: "fa-cloud-bolt" },

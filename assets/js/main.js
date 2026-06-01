@@ -354,14 +354,14 @@ async function renderizarDetalle(id) {
   document.querySelector("#pronostico-detalle").textContent = "";
 
   // cargo los datos y genero estadisticas
-  const regionData = await climaChileApp.cargarDetalleLugar(id);
+  const lugarData = await climaChileApp.cargarDetalleLugar(id);
   const climaActual = traducirClima(
-    regionData.climaActual.clima,
-    regionData.climaActual.esDeDia,
+    lugarData.climaActual.clima,
+    lugarData.climaActual.esDeDia,
   );
-  const pronostico = regionData.pronosticoSemanal;
+  const pronostico = lugarData.pronosticoSemanal;
 
-  if (!regionData) {
+  if (!lugarData) {
     const tituloNoData = document.createElement("h2");
     tituloNoData.textContent = "No se encontró la ciudad";
     detalleContainer.append(tituloNoData);
@@ -369,7 +369,7 @@ async function renderizarDetalle(id) {
   }
 
   const estadisticas = climaChileApp.calcularEstadisticas(
-    regionData.pronosticoSemanal,
+    lugarData.pronosticoSemanal,
   );
 
   console.log("Info estadisticas detalle", estadisticas);
@@ -381,17 +381,17 @@ async function renderizarDetalle(id) {
   h2CiudadDetalle.className = "fw-bolder mb-1";
   const iconoPuntero = document.createElement("i");
   iconoPuntero.className = "fa-solid fa-location-dot tc-primary";
-  const nombreCiudad = regionData.nombreCiudad;
+  const nombreCiudad = lugarData.nombreCiudad;
   h2CiudadDetalle.append(iconoPuntero, nombreCiudad);
 
   const h5RegionDetalle = document.createElement("h5");
   h5RegionDetalle.className = "detail-view__region";
-  const nombreRegion = regionData.nombreRegion;
+  const nombreRegion = lugarData.nombreRegion;
   h5RegionDetalle.append(nombreRegion);
 
   const pResumenDetalle = document.createElement("p");
   pResumenDetalle.className = "detail-view__description mb-4";
-  pResumenDetalle.textContent = regionData.descripcion;
+  pResumenDetalle.textContent = lugarData.descripcion;
 
   divDatosContainer1.append(h2CiudadDetalle, h5RegionDetalle, pResumenDetalle);
   //===================================================
@@ -399,8 +399,8 @@ async function renderizarDetalle(id) {
 
   const imgCiudad = document.createElement("img");
   imgCiudad.className = "detail-view__image object-fit-cover rounded";
-  imgCiudad.src = `./assets/img/${regionData.img}`;
-  imgCiudad.alt = `Ciudad ${regionData.nombreCiudad}`;
+  imgCiudad.src = `./assets/img/${lugarData.img}`;
+  imgCiudad.alt = `Ciudad ${lugarData.nombreCiudad}`;
   imgCiudadDetalle.append(imgCiudad);
   //===================================================
   const divDatosContainer2 = document.querySelector("#datos-container-2");
@@ -414,10 +414,10 @@ async function renderizarDetalle(id) {
     "display-3 fw-bold lh-1 mb-2 d-flex justify-content-between align-items-baseline";
   const spanTemperatura = document.createElement("span");
   spanTemperatura.className = "";
-  spanTemperatura.textContent = `${anteponerCero(regionData.climaActual.tempActual)}`;
+  spanTemperatura.textContent = `${anteponerCero(lugarData.climaActual.tempActual)}`;
   const spanUnidadTemperatura = document.createElement("span");
   spanUnidadTemperatura.className = "regions-card__unit";
-  spanUnidadTemperatura.textContent = regionData.unidadMedida;
+  spanUnidadTemperatura.textContent = lugarData.unidadMedida;
   const divTempContainer = document.createElement("div");
   divTempContainer.className = "tc-primary d-flex";
   divTempContainer.append(spanTemperatura, spanUnidadTemperatura);
@@ -463,7 +463,7 @@ async function renderizarDetalle(id) {
   iconoViento.className = "fa-solid fa-wind";
   h5VientoDetalle.append(iconoViento, " Viento");
   const pVelocidadViento = document.createElement("p");
-  pVelocidadViento.textContent = `${regionData.climaActual.viento} km/h`;
+  pVelocidadViento.textContent = `${lugarData.climaActual.viento} km/h`;
   divVientoDetalle.append(h5VientoDetalle, pVelocidadViento);
 
   const divHumedadDetalle = document.createElement("div");
@@ -472,24 +472,86 @@ async function renderizarDetalle(id) {
   iconoHumedad.className = "fa-solid fa-water";
   h5HumedadDetalle.append(iconoHumedad, " Humedad");
   const pPorcentajeHumedad = document.createElement("p");
-  pPorcentajeHumedad.textContent = `${regionData.climaActual.humedad}%`;
+  pPorcentajeHumedad.textContent = `${lugarData.climaActual.humedad}%`;
   divHumedadDetalle.append(h5HumedadDetalle, pPorcentajeHumedad);
 
   divDatosContainer3.append(divVientoDetalle, divHumedadDetalle);
   //===================================================
-  //===================================================
-  //===================================================
-  //===================================================
-  //===================================================
-  //===================================================
-  //===================================================
-  //===================================================
-  //===================================================
-  //===================================================
-  //===================================================
-  //===================================================
-  //===================================================
-  //===================================================
+  const divDatosContainer4 = document.querySelector("#datos-container-4");
+
+  const h5SubtituloResumenSemana = document.createElement("h5");
+  h5SubtituloResumenSemana.className = "detail-view__subtitle";
+  h5SubtituloResumenSemana.textContent = "Resumen del clima semanal";
+
+  const pResumenCLimaDetalle = document.createElement("p");
+  const elementoIcono = document.createElement("i");
+  const { climaMasRepetido } = estadisticas;
+  elementoIcono.className = `fa-solid ${
+    traducirClima(climaMasRepetido.codigoClima, true).icono
+  } tc-primary`;
+  pResumenCLimaDetalle.append(
+    estadisticas.fraseResumenClima,
+    " ",
+    elementoIcono,
+  );
+
+  const h4SubtituloEstadisticas = document.createElement("h4");
+  h4SubtituloEstadisticas.className = "detail-view__subtitle";
+  h4SubtituloEstadisticas.textContent = "Estadísticas de la semana";
+
+  const ulEstaditicasDetalle = document.createElement("ul");
+  ulEstaditicasDetalle.className = "list-group list-group-horizontal mb-3";
+  // menorTempMin / mayorTempMax / tempPromedio
+  const { menorTempMin, mayorTempMax, tempPromedio } = estadisticas;
+  const temperaturasEstadisticas = [
+    { etiqueta: "Temp. mínima", valor: menorTempMin },
+    { etiqueta: "Temp. máxima", valor: mayorTempMax },
+    { etiqueta: "Temp. promedio", valor: tempPromedio },
+  ];
+  temperaturasEstadisticas.forEach(({ etiqueta, valor }) => {
+    let br = document.createElement("br");
+    const li = document.createElement("li");
+    li.className = "list-group-item detail-view__list-item";
+    li.append(`${etiqueta}:`, br, `${anteponerCero(valor)}°`);
+    ulEstaditicasDetalle.append(li);
+  });
+
+  const h4SubtituloCantidadDias = document.createElement("h4");
+  h4SubtituloCantidadDias.className = "detail-view__subtitle";
+  h4SubtituloCantidadDias.textContent = "Cantidad de días por tipo de clima";
+
+  const ulDiasPorClima = document.createElement("ul");
+  ulDiasPorClima.className = "list-group list-group-horizontal mb-4";
+
+  estadisticas.diasPorClima.forEach(({ cantidadDias, codigoClima }) => {
+    const clima = traducirClima(codigoClima, true);
+    console.log("clima: ", clima);
+
+    const li = document.createElement("li");
+    li.className = "list-group-item detail-view__list-item";
+    const p = document.createElement("p");
+    p.className = "mb-1";
+    const i = document.createElement("i");
+    i.className = `fa-solid ${clima.icono} tc-primary`;
+    p.append(capitalizarTexto(clima.titulo), " ", i);
+    const span = document.createElement("span");
+    span.textContent = `${cantidadDias} ${cantidadDias === 1 ? "día" : "días"}`;
+    li.append(p, span);
+    ulDiasPorClima.append(li);
+  });
+
+  divDatosContainer4.append(
+    h5SubtituloResumenSemana,
+    pResumenCLimaDetalle,
+    h4SubtituloEstadisticas,
+    ulEstaditicasDetalle,
+    h4SubtituloCantidadDias,
+    ulDiasPorClima,
+  );
+
+  //==============================================
+  const ulPronosticoDetalle = document.querySelector("#pronostico-detalle");
+  ulPronosticoDetalle.append(...renderizarPronostico(pronostico));
   //===================================================
 }
 
