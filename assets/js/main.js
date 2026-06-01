@@ -194,7 +194,7 @@ async function renderizarHero() {
   btnDetalleHero.classList.remove("disabled", "bg-secondary", "placeholder");
   btnDetalleHero.textContent = "Ver detalles";
   btnDetalleHero.addEventListener("click", () =>
-    console.log(+btnDetalleHero.dataset.id),
+    mostrarDetalle(+btnDetalleHero.dataset.id),
   );
   //===================================================
   divCardPronostico.textContent = "";
@@ -343,6 +343,54 @@ async function buscarLugar() {
   rendeizarListaCards(listaFiltrada);
 }
 
+// Función para renderizar la vista Detalle
+function renderizarDetalle(id) {
+  console.log(id);
+}
+
+// Funcion para mostrar el detalle en base a un id
+function mostrarDetalle(id) {
+  renderizarDetalle(id);
+  let forecastListItem = document.querySelectorAll(".forecast__list-item");
+
+  heroSection.classList.add("d-none");
+  vistaHome.classList.add("d-none");
+  vistaDetalle.classList.remove("d-none");
+  body.classList.replace("body--home", "body--detail");
+  forecastListItem.forEach((item) =>
+    item.classList.replace(
+      "forecast__list-item--home",
+      "forecast__list-item--detail",
+    ),
+  );
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+}
+
+// Funcion para mostrar la vista Home
+function mostrarHome() {
+  let forecastListItem = document.querySelectorAll(".forecast__list-item");
+
+  heroSection.classList.remove("d-none");
+  vistaHome.classList.remove("d-none");
+  vistaDetalle.classList.add("d-none");
+  body.classList.replace("body--detail", "body--home");
+  forecastListItem.forEach((item) =>
+    item.classList.replace(
+      "forecast__list-item--detail",
+      "forecast__list-item--home",
+    ),
+  );
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+}
+
 /* Eventos */
 // evento buscador
 formularioBusqueda.addEventListener("submit", (e) => {
@@ -356,7 +404,7 @@ formularioBusqueda.addEventListener("submit", (e) => {
     inputBusqueda.classList.remove("is-invalid");
   }
 
-  //mostrarHome();
+  mostrarHome();
 
   vistaHome.scrollIntoView({
     behavior: "smooth",
@@ -380,8 +428,12 @@ regionesContainer.addEventListener("click", (e) => {
   // guardian
   if (!card) return;
   const idRegion = +card.dataset.id;
-  //mostrarDetalle(idRegion);
-  console.log(idRegion);
+  mostrarDetalle(idRegion);
+});
+
+// evento para volver al Home
+botonesHome.forEach((btn) => {
+  btn.addEventListener("click", mostrarHome);
 });
 
 /* Ejecución */
