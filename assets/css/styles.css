@@ -49,12 +49,12 @@
   background-image: radial-gradient(125% 125% at 50% 90%, #1a1a2e 40%, #2fd5ff 100%);
 }
 
-.forecast__temperatures, .forecast__climates, .forecast__day {
-  width: 88px;
+.forecast__temperatures, .forecast__day {
+  width: 60px;
 }
 @media screen and (width <= 767px) {
-  .forecast__temperatures, .forecast__climates, .forecast__day {
-    width: 85px;
+  .forecast__temperatures, .forecast__day {
+    width: 75px;
   }
 }
 
@@ -70,6 +70,9 @@
 .forecast__list-item--detail {
   background-color: #243870;
   color: #e0e0e0;
+}
+.forecast__climates {
+  width: auto;
 }
 .forecast__temperatures {
   text-align: end;
