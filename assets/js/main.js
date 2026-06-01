@@ -344,8 +344,153 @@ async function buscarLugar() {
 }
 
 // Función para renderizar la vista Detalle
-function renderizarDetalle(id) {
-  console.log(id);
+async function renderizarDetalle(id) {
+  // Limpiar todos los contenedores antes de renderizar
+  document.querySelector("#datos-container-1").textContent = "";
+  document.querySelector("#img-ciudad-detalle").textContent = "";
+  document.querySelector("#datos-container-2").textContent = "";
+  document.querySelector("#datos-container-3").textContent = "";
+  document.querySelector("#datos-container-4").textContent = "";
+  document.querySelector("#pronostico-detalle").textContent = "";
+
+  // cargo los datos y genero estadisticas
+  const regionData = await climaChileApp.cargarDetalleLugar(id);
+  const climaActual = traducirClima(
+    regionData.climaActual.clima,
+    regionData.climaActual.esDeDia,
+  );
+  const pronostico = regionData.pronosticoSemanal;
+
+  if (!regionData) {
+    const tituloNoData = document.createElement("h2");
+    tituloNoData.textContent = "No se encontró la ciudad";
+    detalleContainer.append(tituloNoData);
+    return;
+  }
+
+  const estadisticas = climaChileApp.calcularEstadisticas(
+    regionData.pronosticoSemanal,
+  );
+
+  console.log("Info estadisticas detalle", estadisticas);
+
+  //===================================================
+  const divDatosContainer1 = document.querySelector("#datos-container-1");
+
+  const h2CiudadDetalle = document.createElement("h2");
+  h2CiudadDetalle.className = "fw-bolder mb-1";
+  const iconoPuntero = document.createElement("i");
+  iconoPuntero.className = "fa-solid fa-location-dot tc-primary";
+  const nombreCiudad = regionData.nombreCiudad;
+  h2CiudadDetalle.append(iconoPuntero, nombreCiudad);
+
+  const h5RegionDetalle = document.createElement("h5");
+  h5RegionDetalle.className = "detail-view__region";
+  const nombreRegion = regionData.nombreRegion;
+  h5RegionDetalle.append(nombreRegion);
+
+  const pResumenDetalle = document.createElement("p");
+  pResumenDetalle.className = "detail-view__description mb-4";
+  pResumenDetalle.textContent = regionData.descripcion;
+
+  divDatosContainer1.append(h2CiudadDetalle, h5RegionDetalle, pResumenDetalle);
+  //===================================================
+  const imgCiudadDetalle = document.querySelector("#img-ciudad-detalle");
+
+  const imgCiudad = document.createElement("img");
+  imgCiudad.className = "detail-view__image object-fit-cover rounded";
+  imgCiudad.src = `./assets/img/${regionData.img}`;
+  imgCiudad.alt = `Ciudad ${regionData.nombreCiudad}`;
+  imgCiudadDetalle.append(imgCiudad);
+  //===================================================
+  const divDatosContainer2 = document.querySelector("#datos-container-2");
+
+  const pSubtituloTemperatura = document.createElement("p");
+  pSubtituloTemperatura.className = "detail-view__subtitle mb-2";
+  pSubtituloTemperatura.textContent = "Temperatura actual";
+
+  const h3TemperaturaActualDetalle = document.createElement("h3");
+  h3TemperaturaActualDetalle.className =
+    "display-3 fw-bold lh-1 mb-2 d-flex justify-content-between align-items-baseline";
+  const spanTemperatura = document.createElement("span");
+  spanTemperatura.className = "";
+  spanTemperatura.textContent = `${anteponerCero(regionData.climaActual.tempActual)}`;
+  const spanUnidadTemperatura = document.createElement("span");
+  spanUnidadTemperatura.className = "regions-card__unit";
+  spanUnidadTemperatura.textContent = regionData.unidadMedida;
+  const divTempContainer = document.createElement("div");
+  divTempContainer.className = "tc-primary d-flex";
+  divTempContainer.append(spanTemperatura, spanUnidadTemperatura);
+  const iconoEstadoClimaActual = document.createElement("i");
+  iconoEstadoClimaActual.className = `fa-solid ${climaActual.icono} display-5 mt-3`;
+  h3TemperaturaActualDetalle.append(divTempContainer, iconoEstadoClimaActual);
+
+  const divMinMaxEstadoDetalle = document.createElement("div");
+  divMinMaxEstadoDetalle.className =
+    "ms-1 mb-0 d-flex align-items-baseline justify-content-between";
+  const pMinMAx = document.createElement("p");
+  const iconoFlechaMenor = document.createElement("i");
+  iconoFlechaMenor.className = "fa-solid fa-arrow-down";
+  const iconoFlechaMayor = document.createElement("i");
+  iconoFlechaMayor.className = "fa-solid fa-arrow-up";
+  const tempMin = pronostico.tempMinimas[0];
+  const tempMax = pronostico.tempMaximas[0];
+  pMinMAx.append(
+    iconoFlechaMenor,
+    `${anteponerCero(tempMin)}°`,
+    " / ",
+    iconoFlechaMayor,
+    `${anteponerCero(tempMax)}°`,
+  );
+  const pEstadoClimaActual = document.createElement("p");
+  const spanEstadoClimaActual = document.createElement("span");
+  spanEstadoClimaActual.className = "badge bgc-primary tc-accent";
+  spanEstadoClimaActual.textContent = climaActual.titulo;
+  pEstadoClimaActual.append(spanEstadoClimaActual);
+  divMinMaxEstadoDetalle.append(pMinMAx, pEstadoClimaActual);
+
+  divDatosContainer2.append(
+    pSubtituloTemperatura,
+    h3TemperaturaActualDetalle,
+    divMinMaxEstadoDetalle,
+  );
+  //===================================================
+  const divDatosContainer3 = document.querySelector("#datos-container-3");
+
+  const divVientoDetalle = document.createElement("div");
+  const h5VientoDetalle = document.createElement("h5");
+  const iconoViento = document.createElement("i");
+  iconoViento.className = "fa-solid fa-wind";
+  h5VientoDetalle.append(iconoViento, " Viento");
+  const pVelocidadViento = document.createElement("p");
+  pVelocidadViento.textContent = `${regionData.climaActual.viento} km/h`;
+  divVientoDetalle.append(h5VientoDetalle, pVelocidadViento);
+
+  const divHumedadDetalle = document.createElement("div");
+  const h5HumedadDetalle = document.createElement("h5");
+  const iconoHumedad = document.createElement("i");
+  iconoHumedad.className = "fa-solid fa-water";
+  h5HumedadDetalle.append(iconoHumedad, " Humedad");
+  const pPorcentajeHumedad = document.createElement("p");
+  pPorcentajeHumedad.textContent = `${regionData.climaActual.humedad}%`;
+  divHumedadDetalle.append(h5HumedadDetalle, pPorcentajeHumedad);
+
+  divDatosContainer3.append(divVientoDetalle, divHumedadDetalle);
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
+  //===================================================
 }
 
 // Funcion para mostrar el detalle en base a un id
