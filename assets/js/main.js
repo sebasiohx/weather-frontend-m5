@@ -15,28 +15,6 @@ const climaChileApp = new ClimaService(regionesChile);
 
 /* Funciones */
 // Función para traducir el codigo del clima a un icono y texto
-function traducirClima(codigo, esDia) {
-  let objetoClima = {};
-
-  if (codigo === 0)
-    return (objetoClima = esDia
-      ? climas["despejado"]
-      : climas["nocheDespejada"]);
-  if ([1, 2].includes(codigo))
-    return (objetoClima = esDia
-      ? climas["nubladoParcial"]
-      : climas["nocheDespejada"]);
-  if (codigo === 3)
-    return (objetoClima = esDia ? climas["nublado"] : climas["nocheNublada"]);
-  if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(codigo))
-    return (objetoClima = esDia ? climas["lluvia"] : climas["nocheLluvia"]);
-  if (codigo === 77) return (objetoClima = climas["granizo"]);
-  if ([71, 73, 75, 85, 86].includes(codigo))
-    return (objetoClima = climas["nevada"]);
-  if ([95, 96, 99].includes(codigo)) return (objetoClima = climas["tormenta"]);
-
-  return objetoClima;
-}
 
 // Función para poner en mayuscula la primera letra de un texto
 function capitalizarTexto(texto) {
@@ -76,14 +54,12 @@ function renderizarPronostico(pronostico) {
     divClimas.className = "forecast__climates text-center";
 
     const iconoClimaDia = document.createElement("i");
-    iconoClimaDia.className = `fa-solid ${traducirClima(pronostico.climas[index], true).icono} tc-primary`;
-    iconoClimaDia.title = traducirClima(pronostico.climas[index], true).titulo;
+    const clima = climaChileApp.traducirClima(pronostico.climas[index]);
+    iconoClimaDia.className = `fa-solid ${clima.icono} tc-primary`;
+    iconoClimaDia.title = clima.titulo;
     const spanEstadoClimatico = document.createElement("span");
     spanEstadoClimatico.className = "badge bgc-accent";
-    spanEstadoClimatico.textContent = traducirClima(
-      pronostico.climas[index],
-      true,
-    ).titulo;
+    spanEstadoClimatico.textContent = clima.titulo;
     divClimas.append(iconoClimaDia, " ", spanEstadoClimatico);
     const pTemperaturas = document.createElement("p");
     pTemperaturas.className = "forecast__temperatures mb-0";
@@ -127,7 +103,7 @@ async function renderizarHero() {
     (ciudad) => ciudad.nombreCiudad === "Santiago",
   );
   const RM = await climaChileApp.cargarDetalleLugar(indexRm);
-  const climaActual = traducirClima(
+  const climaActual = climaChileApp.traducirClima(
     RM.climaActual.clima,
     RM.climaActual.esDeDia,
   );
@@ -207,6 +183,11 @@ async function renderizarHero() {
 
 // Funcion para renderizar una card
 function crearCard(lugar) {
+  const clima = climaChileApp.traducirClima(
+    lugar.climaActual.clima,
+    lugar.climaActual.esDeDia,
+  );
+
   const col = document.createElement("div");
   col.className = "col-12 col-sm-6 col-md-4 col-lg-3";
   //=================================================
@@ -257,7 +238,7 @@ function crearCard(lugar) {
   divTempContainer.append(spanTemperatura, spanUnidadTemperatura);
   //=================================================
   const iconoClima = document.createElement("i");
-  iconoClima.className = `fa-solid ${traducirClima(lugar.climaActual.clima, true).icono} display-6 tc-primary mt-3`;
+  iconoClima.className = `fa-solid ${clima.icono} display-6 tc-primary mt-3`;
 
   h2.append(divTempContainer, iconoClima);
   //=================================================
@@ -269,7 +250,7 @@ function crearCard(lugar) {
   //=================================================
   const spanEstado = document.createElement("span");
   spanEstado.className = "badge bgc-accent";
-  spanEstado.textContent = traducirClima(lugar.climaActual.clima, true).titulo;
+  spanEstado.textContent = clima.titulo;
 
   p.append(spanRango);
   p.append(spanEstado);
@@ -355,10 +336,14 @@ async function renderizarDetalle(id) {
 
   // cargo los datos y genero estadisticas
   const lugarData = await climaChileApp.cargarDetalleLugar(id);
-  const climaActual = traducirClima(
+  console.log("Detalle lugar data: ", lugarData);
+
+  const climaActual = climaChileApp.traducirClima(
     lugarData.climaActual.clima,
     lugarData.climaActual.esDeDia,
   );
+  console.log("clima actual: ", climaActual);
+
   const pronostico = lugarData.pronosticoSemanal;
 
   if (!lugarData) {
@@ -486,9 +471,11 @@ async function renderizarDetalle(id) {
   const pResumenCLimaDetalle = document.createElement("p");
   const elementoIcono = document.createElement("i");
   const { climaMasRepetido } = estadisticas;
-  elementoIcono.className = `fa-solid ${
-    traducirClima(climaMasRepetido.codigoClima, true).icono
-  } tc-primary`;
+  const dataClimaMasRepetido = climaChileApp.traducirClima(
+    climaMasRepetido.codigoClima,
+  );
+
+  elementoIcono.className = `fa-solid ${dataClimaMasRepetido.icono} tc-primary`;
   pResumenCLimaDetalle.append(
     estadisticas.fraseResumenClima,
     " ",
@@ -524,7 +511,7 @@ async function renderizarDetalle(id) {
   ulDiasPorClima.className = "list-group list-group-horizontal mb-4";
 
   estadisticas.diasPorClima.forEach(({ cantidadDias, codigoClima }) => {
-    const clima = traducirClima(codigoClima, true);
+    const clima = climaChileApp.traducirClima(codigoClima);
     console.log("clima: ", clima);
 
     const li = document.createElement("li");

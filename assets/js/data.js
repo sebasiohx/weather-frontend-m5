@@ -363,6 +363,30 @@ class ClimaService {
     location.reload();
   }
 
+  traducirClima(codigo, esDia = true) {
+    let objetoClima = {};
+
+    if (codigo === 0)
+      return (objetoClima = esDia
+        ? climas["despejado"]
+        : climas["nocheDespejada"]);
+    if ([1, 2].includes(codigo))
+      return (objetoClima = esDia
+        ? climas["nubladoParcial"]
+        : climas["nocheDespejada"]);
+    if (codigo === 3)
+      return (objetoClima = esDia ? climas["nublado"] : climas["nocheNublada"]);
+    if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(codigo))
+      return (objetoClima = esDia ? climas["lluvia"] : climas["nocheLluvia"]);
+    if (codigo === 77) return (objetoClima = climas["granizo"]);
+    if ([71, 73, 75, 85, 86].includes(codigo))
+      return (objetoClima = climas["nevada"]);
+    if ([95, 96, 99].includes(codigo))
+      return (objetoClima = climas["tormenta"]);
+
+    return objetoClima;
+  }
+
   calcularEstadisticas(pronostico) {
     if (!pronostico) {
       console.error(
@@ -384,13 +408,15 @@ class ClimaService {
     );
 
     const conteoTemporalClimas = pronostico.climas.reduce((acc, codigo) => {
-      if (!acc[codigo]) {
-        acc[codigo] = {
+      let tipoClima = this.traducirClima(codigo).titulo;
+
+      if (!acc[tipoClima]) {
+        acc[tipoClima] = {
           codigoClima: codigo,
           cantidadDias: 0,
         };
       }
-      acc[codigo].cantidadDias += 1;
+      acc[tipoClima].cantidadDias += 1;
       return acc;
     }, {});
 
