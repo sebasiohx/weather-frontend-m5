@@ -204,8 +204,7 @@ class ClimaService {
     this.listaLugares = listaLugares;
     this.dataClimaLugares = [];
     this.dataLugarDetalle = {};
-    this.unidadTemperatura =
-      sessionStorage.getItem("unidadTemperatura") ?? "celsius";
+    this.unidadTemperatura = "celsius";
   }
 
   async obtenerCoordenadas(nombreCiudad) {
@@ -218,7 +217,6 @@ class ClimaService {
 
       const datosGeo = await respuestaGeo.json();
 
-      //0: latitud 1:longitud
       return [datosGeo.results[0].latitude, datosGeo.results[0].longitude];
     } catch (error) {
       console.error("Falló la petición a las coordenadas:", error.message);
@@ -227,17 +225,7 @@ class ClimaService {
   }
 
   async obtenerClima(latitud, longitud) {
-    const claveSesion = `clima_${latitud}_${longitud}`;
-
     try {
-      // 1. consultar si estan los datos en Storage
-      const datosEnCache = sessionStorage.getItem(claveSesion);
-
-      if (datosEnCache) {
-        return JSON.parse(datosEnCache);
-      }
-
-      // 2. si no estan en el Storage, traer los datos desde la API
       const respuestaClima = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${latitud}&longitude=${longitud}&daily=temperature_2m_max,temperature_2m_min,weather_code,temperature_2m_mean,precipitation_probability_mean&current=temperature_2m,relative_humidity_2m,cloud_cover,wind_speed_10m,is_day,weather_code&timezone=auto&temperature_unit=${this.unidadTemperatura}`,
       );
@@ -245,9 +233,6 @@ class ClimaService {
       if (!respuestaClima.ok) throw new Error(`Error ${respuestaClima.status}`);
 
       const datosClima = await respuestaClima.json();
-
-      // 3. guardar los datos de la API en el Storage
-      sessionStorage.setItem(claveSesion, JSON.stringify(datosClima));
 
       return datosClima;
     } catch (error) {
@@ -354,12 +339,7 @@ class ClimaService {
       console.error("Unidad de temperatura invalida");
       return;
     }
-    sessionStorage.setItem("unidadTemperatura", nuevaUnidad);
-
-    Object.keys(sessionStorage)
-      .filter((clave) => clave.startsWith("clima_"))
-      .forEach((clave) => sessionStorage.removeItem(clave));
-
+    this.unidadTemperatura = nuevaUnidad;
     location.reload();
   }
 

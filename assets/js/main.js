@@ -329,10 +329,15 @@ async function renderizarDetalle(id) {
   // Limpiar todos los contenedores antes de renderizar
   document.querySelector("#datos-container-1").textContent = "";
   document.querySelector("#img-ciudad-detalle").textContent = "";
+  document.querySelector("#img-ciudad-detalle").textContent = "";
   document.querySelector("#datos-container-2").textContent = "";
   document.querySelector("#datos-container-3").textContent = "";
   document.querySelector("#datos-container-4").textContent = "";
-  document.querySelector("#pronostico-detalle").textContent = "";
+
+  document.querySelector("#datos-container-1").append(mostrarLoading());
+  document.querySelector("#img-ciudad-detalle").append(mostrarLoading());
+  document.querySelector("#pronostico-detalle").textContent =
+    "Cargando pronóstico...";
 
   // cargo los datos y genero estadisticas
   const lugarData = await climaChileApp.cargarDetalleLugar(id);
@@ -361,6 +366,7 @@ async function renderizarDetalle(id) {
 
   //===================================================
   const divDatosContainer1 = document.querySelector("#datos-container-1");
+  divDatosContainer1.textContent = "";
 
   const h2CiudadDetalle = document.createElement("h2");
   h2CiudadDetalle.className = "fw-bolder mb-1";
@@ -381,6 +387,7 @@ async function renderizarDetalle(id) {
   divDatosContainer1.append(h2CiudadDetalle, h5RegionDetalle, pResumenDetalle);
   //===================================================
   const imgCiudadDetalle = document.querySelector("#img-ciudad-detalle");
+  imgCiudadDetalle.textContent = "";
 
   const imgCiudad = document.createElement("img");
   imgCiudad.className = "detail-view__image object-fit-cover rounded";
@@ -538,6 +545,7 @@ async function renderizarDetalle(id) {
 
   //==============================================
   const ulPronosticoDetalle = document.querySelector("#pronostico-detalle");
+  ulPronosticoDetalle.textContent = "";
   ulPronosticoDetalle.append(...renderizarPronostico(pronostico));
   //===================================================
 }
