@@ -28,6 +28,56 @@ function anteponerCero(num) {
   return String(num).padStart(2, "0");
 }
 
+// Funcion que devuelve un loading como elemento HTML
+function mostrarLoading() {
+  const divContainer = document.createElement("div");
+  divContainer.className = "d-flex justify-content-center";
+  const divSpinner = document.createElement("div");
+  divSpinner.className = "spinner-border tc-primary border-5";
+  divSpinner.role = "status";
+  divSpinner.style.width = "4.5rem";
+  divSpinner.style.height = "4.5rem";
+  const spanLoading = document.createElement("span");
+  spanLoading.className = "visually-hidden";
+  spanLoading.textContent = "Cargando...";
+
+  divSpinner.append(spanLoading);
+  divContainer.append(divSpinner);
+
+  return divContainer;
+}
+
+// Funcióm para mostrar un mensaje de alerta cuando no se carguen los datos
+function mostrarAlertaErrorApi(elementoHtml) {
+  //<div class="alert alert-danger" role="alert">
+  const divAlerta = document.createElement("div");
+  divAlerta.className = "alert alert-danger";
+  divAlerta.setAttribute("role", "alert");
+  // <i class="fa-solid fa-triangle-exclamation"></i>
+  const iconoAlerta = document.createElement("i");
+  iconoAlerta.className = "fa-solid fa-triangle-exclamation";
+  // <a href="#" class="alert-link">
+  const linkAlerta = document.createElement("a");
+  linkAlerta.className = "alert-link";
+  linkAlerta.href = "#";
+  linkAlerta.textContent = "recargar la página";
+  linkAlerta.onclick = () => location.reload();
+
+  divAlerta.append(
+    iconoAlerta,
+    ` Error al cargar los datos, espere un momento o intenta `,
+    linkAlerta,
+    ".",
+  );
+
+  elementoHtml.append(divAlerta);
+}
+
+// Función para generar un "error" cuando pasa el tiempo más de "ms" milisegundos, sirve para comparar con otra promesa para ver cual termina primero
+function timeoutPromesa(ms) {
+  return new Promise((_, reject) => setTimeout(() => reject("timeout"), ms));
+}
+
 // Función para mostrar el listado con el pronostico
 function renderizarPronostico(pronostico) {
   let vistaClass = "";
@@ -86,99 +136,125 @@ async function renderizarHero() {
   const divColFecha = document.querySelector("#container-fecha-hero");
   const btnDetalleHero = document.querySelector("#btn-hero");
   const divCardPronostico = document.querySelector("#card-pronostico");
+  const divAlerta = document.querySelector("#alerta-error");
 
   h2Ciudad.textContent = "Cargando ciudad...";
   h2Region.textContent = "Obteniendo región...";
   h1CifraTempreatura.textContent = "--°";
   h3MinMax.textContent = "--° / --°";
-  divEstadoClimatico.textContent = "Cargando clima...";
+  divEstadoClimatico.append(mostrarLoading());
   divColFecha.textContent = "Cargando fecha...";
   btnDetalleHero.textContent = "Cargando...";
   btnDetalleHero.classList.add("disabled", "bg-secondary", "placeholder");
-  divCardPronostico.textContent = "Cargando pronóstico...";
+  divCardPronostico.append(mostrarLoading());
   divCardPronostico.classList.add("d-flex", "align-content-center");
 
-  // Llegan los datos
-  const indexRm = climaChileApp.listaLugares.findIndex(
-    (ciudad) => ciudad.nombreCiudad === "Santiago",
-  );
-  const RM = await climaChileApp.cargarDetalleLugar(indexRm);
-  const climaActual = climaChileApp.traducirClima(
-    RM.climaActual.clima,
-    RM.climaActual.esDeDia,
-  );
-  const hoy = new Date(RM.climaActual.fecha);
-  const fecha = hoy
-    .toLocaleDateString("es-CL", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    })
-    .replace(",", " ");
+  try {
+    // Llegan los datos
+    const indexRm = climaChileApp.listaLugares.findIndex(
+      (ciudad) => ciudad.nombreCiudad === "Santiago",
+    );
 
-  const hora = hoy.toLocaleTimeString("es-CL", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
+    const RM = await Promise.race([
+      climaChileApp.cargarDetalleLugar(indexRm),
+      timeoutPromesa(10000),
+    ]);
 
-  // limpiamos y renderizamos
-  h2Ciudad.textContent = "";
-  const iconoCiudad = document.createElement("i");
-  iconoCiudad.className = "fa-solid fa-location-dot tc-primary";
-  const nombreCiudad = document.createElement("span");
-  nombreCiudad.textContent = RM.nombreCiudad;
-  h2Ciudad.append(iconoCiudad, " ", nombreCiudad);
-  //===================================================
-  h2Region.textContent = "";
-  h2Region.append(document.createTextNode(RM.nombreRegion));
-  //===================================================
-  h1CifraTempreatura.textContent = "";
-  const spanUnidadTemp = document.createElement("span");
-  spanUnidadTemp.className = "hero-card__unit mt-1 mt-md-2";
-  spanUnidadTemp.textContent = RM.unidadMedida;
-  h1CifraTempreatura.append(
-    `${anteponerCero(RM.climaActual.tempActual)}`,
-    spanUnidadTemp,
-  );
-  //===================================================
-  h3MinMax.textContent = "";
-  const pronostico = RM.pronosticoSemanal;
-  const tempMin = pronostico.tempMinimas[0];
-  const tempMax = pronostico.tempMaximas[0];
-  const cifrasMinMax = document.createTextNode(
-    `${anteponerCero(tempMin)}° / ${anteponerCero(tempMax)}°`,
-  );
-  h3MinMax.append(cifrasMinMax);
-  //===================================================
-  divEstadoClimatico.textContent = "";
-  const iconoEstadoClimatico = document.createElement("i");
-  iconoEstadoClimatico.className = `fa-solid ${climaActual.icono} display-1 tc-primary`;
-  const textoEstadoClimatico = document.createElement("span");
-  textoEstadoClimatico.className = "badge bgc-accent";
-  textoEstadoClimatico.textContent = climaActual.titulo;
-  divEstadoClimatico.append(iconoEstadoClimatico, textoEstadoClimatico);
-  //===================================================
-  divColFecha.textContent = "";
-  const h4Fecha = document.createElement("h4");
-  h4Fecha.className = "hero-card__date";
-  h4Fecha.textContent = `última actualización: ${fecha}, a las ${hora}hrs.*`;
-  divColFecha.append(h4Fecha);
-  //===================================================
-  btnDetalleHero.dataset.id = RM.id;
-  btnDetalleHero.classList.remove("disabled", "bg-secondary", "placeholder");
-  btnDetalleHero.textContent = "Ver detalles";
-  btnDetalleHero.addEventListener("click", () =>
-    mostrarDetalle(+btnDetalleHero.dataset.id),
-  );
-  //===================================================
-  divCardPronostico.textContent = "";
-  divCardPronostico.classList.remove("d-flex", "align-content-center");
-  const ulListaPronostico = document.createElement("ul");
-  ulListaPronostico.className = "list-group forecast";
-  ulListaPronostico.append(...renderizarPronostico(RM.pronosticoSemanal));
-  divCardPronostico.append(ulListaPronostico);
+    const climaActual = climaChileApp.traducirClima(
+      RM.climaActual.clima,
+      RM.climaActual.esDeDia,
+    );
+    const hoy = new Date(RM.climaActual.fecha);
+    const fecha = hoy
+      .toLocaleDateString("es-CL", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+      .replace(",", " ");
+
+    const hora = hoy.toLocaleTimeString("es-CL", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
+    // limpiamos y renderizamos
+    h2Ciudad.textContent = "";
+    const iconoCiudad = document.createElement("i");
+    iconoCiudad.className = "fa-solid fa-location-dot tc-primary";
+    const nombreCiudad = document.createElement("span");
+    nombreCiudad.textContent = RM.nombreCiudad;
+    h2Ciudad.append(iconoCiudad, " ", nombreCiudad);
+    //===================================================
+    h2Region.textContent = "";
+    h2Region.append(document.createTextNode(RM.nombreRegion));
+    //===================================================
+    h1CifraTempreatura.textContent = "";
+    const spanUnidadTemp = document.createElement("span");
+    spanUnidadTemp.className = "hero-card__unit mt-1 mt-md-2";
+    spanUnidadTemp.textContent = RM.unidadMedida;
+    h1CifraTempreatura.append(
+      `${anteponerCero(RM.climaActual.tempActual)}`,
+      spanUnidadTemp,
+    );
+    //===================================================
+    h3MinMax.textContent = "";
+    const pronostico = RM.pronosticoSemanal;
+    const tempMin = pronostico.tempMinimas[0];
+    const tempMax = pronostico.tempMaximas[0];
+    const cifrasMinMax = document.createTextNode(
+      `${anteponerCero(tempMin)}° / ${anteponerCero(tempMax)}°`,
+    );
+    h3MinMax.append(cifrasMinMax);
+    //===================================================
+    divEstadoClimatico.textContent = "";
+    const iconoEstadoClimatico = document.createElement("i");
+    iconoEstadoClimatico.className = `fa-solid ${climaActual.icono} display-1 tc-primary`;
+    const textoEstadoClimatico = document.createElement("span");
+    textoEstadoClimatico.className = "badge bgc-accent";
+    textoEstadoClimatico.textContent = climaActual.titulo;
+    divEstadoClimatico.append(iconoEstadoClimatico, textoEstadoClimatico);
+    //===================================================
+    divColFecha.textContent = "";
+    const h4Fecha = document.createElement("h4");
+    h4Fecha.className = "hero-card__date";
+    h4Fecha.textContent = `última actualización: ${fecha}, a las ${hora}hrs.*`;
+    divColFecha.append(h4Fecha);
+    //===================================================
+    btnDetalleHero.dataset.id = RM.id;
+    btnDetalleHero.classList.remove("disabled", "bg-secondary", "placeholder");
+    btnDetalleHero.textContent = "Ver detalles";
+    btnDetalleHero.addEventListener("click", () =>
+      mostrarDetalle(+btnDetalleHero.dataset.id),
+    );
+    //===================================================
+    divCardPronostico.textContent = "";
+    divCardPronostico.classList.remove("d-flex", "align-content-center");
+    const ulListaPronostico = document.createElement("ul");
+    ulListaPronostico.className = "list-group forecast";
+    ulListaPronostico.append(...renderizarPronostico(RM.pronosticoSemanal));
+    divCardPronostico.append(ulListaPronostico);
+  } catch (error) {
+    h2Ciudad.textContent = "⚠️ Error";
+    h2Region.textContent = "";
+    h1CifraTempreatura.textContent = "--°";
+    h3MinMax.textContent = "";
+
+    divEstadoClimatico.textContent = "";
+    const iconoEstadoClimatico = document.createElement("i");
+    iconoEstadoClimatico.className = `fa-solid fa-sun display-1 text-secondary`;
+    const textoEstadoClimatico = document.createElement("span");
+    textoEstadoClimatico.className = "badge text-bg-secondary";
+    textoEstadoClimatico.textContent = "Error";
+    divEstadoClimatico.append(iconoEstadoClimatico, textoEstadoClimatico);
+
+    divColFecha.textContent = "";
+    btnDetalleHero.textContent = "Error";
+    divCardPronostico.textContent = "[Error al cargar pronóstico]";
+    mostrarAlertaErrorApi(divAlerta);
+  }
 }
 
 // Funcion para renderizar una card
@@ -268,25 +344,6 @@ function crearCard(lugar) {
   return col;
 }
 
-// Funcion que devuelve un loading como elemento HTML
-function mostrarLoading() {
-  const divContainer = document.createElement("div");
-  divContainer.className = "d-flex justify-content-center";
-  const divSpinner = document.createElement("div");
-  divSpinner.className = "spinner-border tc-primary border-5";
-  divSpinner.role = "status";
-  divSpinner.style.width = "4.5rem";
-  divSpinner.style.height = "4.5rem";
-  const spanLoading = document.createElement("span");
-  spanLoading.className = "visually-hidden";
-  spanLoading.textContent = "Cargando...";
-
-  divSpinner.append(spanLoading);
-  divContainer.append(divSpinner);
-
-  return divContainer;
-}
-
 // Funcion para renderizar todas las cards
 async function rendeizarListaCards(listaLugares) {
   regionesContainer.append(mostrarLoading());
@@ -326,9 +383,11 @@ async function buscarLugar() {
 
 // Función para renderizar la vista Detalle
 async function renderizarDetalle(id) {
+  const divAlerta = document.querySelector("#alerta-error");
+  const divAlertaClimatica = document.querySelector("#alerta-climatica");
+
   // Limpiar todos los contenedores antes de renderizar
   document.querySelector("#datos-container-1").textContent = "";
-  document.querySelector("#img-ciudad-detalle").textContent = "";
   document.querySelector("#img-ciudad-detalle").textContent = "";
   document.querySelector("#datos-container-2").textContent = "";
   document.querySelector("#datos-container-3").textContent = "";
@@ -338,216 +397,236 @@ async function renderizarDetalle(id) {
   document.querySelector("#img-ciudad-detalle").append(mostrarLoading());
   document.querySelector("#pronostico-detalle").textContent =
     "Cargando pronóstico...";
+  divAlerta.textContent = "";
+  divAlertaClimatica.textContent = "";
+  divAlertaClimatica.classList.add("d-none");
 
-  // cargo los datos y genero estadisticas
-  const lugarData = await climaChileApp.cargarDetalleLugar(id);
-  console.log("Detalle lugar data: ", lugarData);
+  try {
+    // cargo los datos y genero estadisticas
+    //const lugarData = await climaChileApp.cargarDetalleLugar();
 
-  const climaActual = climaChileApp.traducirClima(
-    lugarData.climaActual.clima,
-    lugarData.climaActual.esDeDia,
-  );
-  console.log("clima actual: ", climaActual);
+    const lugarData = await Promise.race([
+      climaChileApp.cargarDetalleLugar(id),
+      timeoutPromesa(4000),
+    ]);
 
-  const pronostico = lugarData.pronosticoSemanal;
+    const climaActual = climaChileApp.traducirClima(
+      lugarData.climaActual.clima,
+      lugarData.climaActual.esDeDia,
+    );
+    console.log("clima actual: ", climaActual);
 
-  if (!lugarData) {
+    const pronostico = lugarData.pronosticoSemanal;
+
+    const estadisticas = climaChileApp.calcularEstadisticas(
+      lugarData.pronosticoSemanal,
+    );
+
+    console.log("Info estadisticas detalle", estadisticas);
+
+    //===================================================
+    const divDatosContainer1 = document.querySelector("#datos-container-1");
+    divDatosContainer1.textContent = "";
+
+    const h2CiudadDetalle = document.createElement("h2");
+    h2CiudadDetalle.className = "fw-bolder mb-1";
+    const iconoPuntero = document.createElement("i");
+    iconoPuntero.className = "fa-solid fa-location-dot tc-primary";
+    const nombreCiudad = lugarData.nombreCiudad;
+    h2CiudadDetalle.append(iconoPuntero, nombreCiudad);
+
+    const h5RegionDetalle = document.createElement("h5");
+    h5RegionDetalle.className = "detail-view__region";
+    const nombreRegion = lugarData.nombreRegion;
+    h5RegionDetalle.append(nombreRegion);
+
+    const pResumenDetalle = document.createElement("p");
+    pResumenDetalle.className = "detail-view__description mb-4";
+    pResumenDetalle.textContent = lugarData.descripcion;
+
+    divDatosContainer1.append(
+      h2CiudadDetalle,
+      h5RegionDetalle,
+      pResumenDetalle,
+    );
+    //===================================================
+    const imgCiudadDetalle = document.querySelector("#img-ciudad-detalle");
+    imgCiudadDetalle.textContent = "";
+
+    const imgCiudad = document.createElement("img");
+    imgCiudad.className = "detail-view__image object-fit-cover rounded";
+    imgCiudad.src = `./assets/img/${lugarData.img}`;
+    imgCiudad.alt = `Ciudad ${lugarData.nombreCiudad}`;
+    imgCiudadDetalle.append(imgCiudad);
+    //===================================================
+    const divDatosContainer2 = document.querySelector("#datos-container-2");
+
+    const pSubtituloTemperatura = document.createElement("p");
+    pSubtituloTemperatura.className = "detail-view__subtitle mb-2";
+    pSubtituloTemperatura.textContent = "Temperatura actual";
+
+    const h3TemperaturaActualDetalle = document.createElement("h3");
+    h3TemperaturaActualDetalle.className =
+      "display-3 fw-bold lh-1 mb-2 d-flex justify-content-between align-items-baseline";
+    const spanTemperatura = document.createElement("span");
+    spanTemperatura.className = "";
+    spanTemperatura.textContent = `${anteponerCero(lugarData.climaActual.tempActual)}`;
+    const spanUnidadTemperatura = document.createElement("span");
+    spanUnidadTemperatura.className = "regions-card__unit";
+    spanUnidadTemperatura.textContent = lugarData.unidadMedida;
+    const divTempContainer = document.createElement("div");
+    divTempContainer.className = "tc-primary d-flex";
+    divTempContainer.append(spanTemperatura, spanUnidadTemperatura);
+    const iconoEstadoClimaActual = document.createElement("i");
+    iconoEstadoClimaActual.className = `fa-solid ${climaActual.icono} display-5 mt-3`;
+    h3TemperaturaActualDetalle.append(divTempContainer, iconoEstadoClimaActual);
+
+    const divMinMaxEstadoDetalle = document.createElement("div");
+    divMinMaxEstadoDetalle.className =
+      "ms-1 mb-0 d-flex align-items-baseline justify-content-between";
+    const pMinMAx = document.createElement("p");
+    const iconoFlechaMenor = document.createElement("i");
+    iconoFlechaMenor.className = "fa-solid fa-arrow-down";
+    const iconoFlechaMayor = document.createElement("i");
+    iconoFlechaMayor.className = "fa-solid fa-arrow-up";
+    const tempMin = pronostico.tempMinimas[0];
+    const tempMax = pronostico.tempMaximas[0];
+    pMinMAx.append(
+      iconoFlechaMenor,
+      `${anteponerCero(tempMin)}°`,
+      " / ",
+      iconoFlechaMayor,
+      `${anteponerCero(tempMax)}°`,
+    );
+    const pEstadoClimaActual = document.createElement("p");
+    const spanEstadoClimaActual = document.createElement("span");
+    spanEstadoClimaActual.className = "badge bgc-primary tc-accent";
+    spanEstadoClimaActual.textContent = climaActual.titulo;
+    pEstadoClimaActual.append(spanEstadoClimaActual);
+    divMinMaxEstadoDetalle.append(pMinMAx, pEstadoClimaActual);
+
+    divDatosContainer2.append(
+      pSubtituloTemperatura,
+      h3TemperaturaActualDetalle,
+      divMinMaxEstadoDetalle,
+    );
+    //===================================================
+    const divDatosContainer3 = document.querySelector("#datos-container-3");
+
+    const divVientoDetalle = document.createElement("div");
+    const h5VientoDetalle = document.createElement("h5");
+    const iconoViento = document.createElement("i");
+    iconoViento.className = "fa-solid fa-wind";
+    h5VientoDetalle.append(iconoViento, " Viento");
+    const pVelocidadViento = document.createElement("p");
+    pVelocidadViento.textContent = `${lugarData.climaActual.viento} km/h`;
+    divVientoDetalle.append(h5VientoDetalle, pVelocidadViento);
+
+    const divHumedadDetalle = document.createElement("div");
+    const h5HumedadDetalle = document.createElement("h5");
+    const iconoHumedad = document.createElement("i");
+    iconoHumedad.className = "fa-solid fa-water";
+    h5HumedadDetalle.append(iconoHumedad, " Humedad");
+    const pPorcentajeHumedad = document.createElement("p");
+    pPorcentajeHumedad.textContent = `${lugarData.climaActual.humedad}%`;
+    divHumedadDetalle.append(h5HumedadDetalle, pPorcentajeHumedad);
+
+    divDatosContainer3.append(divVientoDetalle, divHumedadDetalle);
+    //===================================================
+    const divDatosContainer4 = document.querySelector("#datos-container-4");
+
+    const h5SubtituloResumenSemana = document.createElement("h5");
+    h5SubtituloResumenSemana.className = "detail-view__subtitle";
+    h5SubtituloResumenSemana.textContent = "Resumen del clima semanal";
+
+    const pResumenCLimaDetalle = document.createElement("p");
+    const elementoIcono = document.createElement("i");
+    const { climaMasRepetido } = estadisticas;
+    const dataClimaMasRepetido = climaChileApp.traducirClima(
+      climaMasRepetido.codigoClima,
+    );
+
+    elementoIcono.className = `fa-solid ${dataClimaMasRepetido.icono} tc-primary`;
+    pResumenCLimaDetalle.append(
+      estadisticas.fraseResumenClima,
+      " ",
+      elementoIcono,
+    );
+
+    const h4SubtituloEstadisticas = document.createElement("h4");
+    h4SubtituloEstadisticas.className = "detail-view__subtitle";
+    h4SubtituloEstadisticas.textContent = "Estadísticas de la semana";
+
+    const ulEstaditicasDetalle = document.createElement("ul");
+    ulEstaditicasDetalle.className = "list-group list-group-horizontal mb-3";
+    // menorTempMin / mayorTempMax / tempPromedio
+    const { menorTempMin, mayorTempMax, tempPromedio } = estadisticas;
+    const temperaturasEstadisticas = [
+      { etiqueta: "Temp. mínima", valor: menorTempMin },
+      { etiqueta: "Temp. máxima", valor: mayorTempMax },
+      { etiqueta: "Temp. promedio", valor: tempPromedio },
+    ];
+    temperaturasEstadisticas.forEach(({ etiqueta, valor }) => {
+      let br = document.createElement("br");
+      const li = document.createElement("li");
+      li.className = "list-group-item detail-view__list-item";
+      li.append(`${etiqueta}:`, br, `${anteponerCero(valor)}°`);
+      ulEstaditicasDetalle.append(li);
+    });
+
+    const h4SubtituloCantidadDias = document.createElement("h4");
+    h4SubtituloCantidadDias.className = "detail-view__subtitle";
+    h4SubtituloCantidadDias.textContent = "Cantidad de días por tipo de clima";
+
+    const ulDiasPorClima = document.createElement("ul");
+    ulDiasPorClima.className = "list-group list-group-horizontal mb-4";
+
+    estadisticas.diasPorClima.forEach(({ cantidadDias, codigoClima }) => {
+      const clima = climaChileApp.traducirClima(codigoClima);
+      console.log("clima: ", clima);
+
+      const li = document.createElement("li");
+      li.className = "list-group-item detail-view__list-item";
+      const p = document.createElement("p");
+      p.className = "mb-1";
+      const i = document.createElement("i");
+      i.className = `fa-solid ${clima.icono} tc-primary`;
+      p.append(capitalizarTexto(clima.titulo), " ", i);
+      const span = document.createElement("span");
+      span.textContent = `${cantidadDias} ${cantidadDias === 1 ? "día" : "días"}`;
+      li.append(p, span);
+      ulDiasPorClima.append(li);
+    });
+
+    divDatosContainer4.append(
+      h5SubtituloResumenSemana,
+      pResumenCLimaDetalle,
+      h4SubtituloEstadisticas,
+      ulEstaditicasDetalle,
+      h4SubtituloCantidadDias,
+      ulDiasPorClima,
+    );
+    //==============================================
+    const iconoAlerta = document.createElement("i");
+    iconoAlerta.className = "fa-solid fa-triangle-exclamation";
+    if (estadisticas.fraseAlerta !== "") {
+      divAlertaClimatica.classList.remove("d-none");
+      divAlertaClimatica.append(iconoAlerta, " ", estadisticas.fraseAlerta);
+    }
+    //===================================================
+    const ulPronosticoDetalle = document.querySelector("#pronostico-detalle");
+    ulPronosticoDetalle.textContent = "";
+    ulPronosticoDetalle.append(...renderizarPronostico(pronostico));
+  } catch (error) {
+    document.querySelector("#datos-container-1").textContent = "";
+    document.querySelector("#img-ciudad-detalle").textContent = "";
     const tituloNoData = document.createElement("h2");
-    tituloNoData.textContent = "No se encontró la ciudad";
-    detalleContainer.append(tituloNoData);
-    return;
+    tituloNoData.textContent = "Error al cargar los datos";
+    document.querySelector("#datos-container-1").append(tituloNoData);
+    const ulPronosticoDetalle = document.querySelector("#pronostico-detalle");
+    ulPronosticoDetalle.textContent = "[Error al cargar pronóstico]";
+    mostrarAlertaErrorApi(divAlerta);
   }
-
-  const estadisticas = climaChileApp.calcularEstadisticas(
-    lugarData.pronosticoSemanal,
-  );
-
-  console.log("Info estadisticas detalle", estadisticas);
-
-  //===================================================
-  const divDatosContainer1 = document.querySelector("#datos-container-1");
-  divDatosContainer1.textContent = "";
-
-  const h2CiudadDetalle = document.createElement("h2");
-  h2CiudadDetalle.className = "fw-bolder mb-1";
-  const iconoPuntero = document.createElement("i");
-  iconoPuntero.className = "fa-solid fa-location-dot tc-primary";
-  const nombreCiudad = lugarData.nombreCiudad;
-  h2CiudadDetalle.append(iconoPuntero, nombreCiudad);
-
-  const h5RegionDetalle = document.createElement("h5");
-  h5RegionDetalle.className = "detail-view__region";
-  const nombreRegion = lugarData.nombreRegion;
-  h5RegionDetalle.append(nombreRegion);
-
-  const pResumenDetalle = document.createElement("p");
-  pResumenDetalle.className = "detail-view__description mb-4";
-  pResumenDetalle.textContent = lugarData.descripcion;
-
-  divDatosContainer1.append(h2CiudadDetalle, h5RegionDetalle, pResumenDetalle);
-  //===================================================
-  const imgCiudadDetalle = document.querySelector("#img-ciudad-detalle");
-  imgCiudadDetalle.textContent = "";
-
-  const imgCiudad = document.createElement("img");
-  imgCiudad.className = "detail-view__image object-fit-cover rounded";
-  imgCiudad.src = `./assets/img/${lugarData.img}`;
-  imgCiudad.alt = `Ciudad ${lugarData.nombreCiudad}`;
-  imgCiudadDetalle.append(imgCiudad);
-  //===================================================
-  const divDatosContainer2 = document.querySelector("#datos-container-2");
-
-  const pSubtituloTemperatura = document.createElement("p");
-  pSubtituloTemperatura.className = "detail-view__subtitle mb-2";
-  pSubtituloTemperatura.textContent = "Temperatura actual";
-
-  const h3TemperaturaActualDetalle = document.createElement("h3");
-  h3TemperaturaActualDetalle.className =
-    "display-3 fw-bold lh-1 mb-2 d-flex justify-content-between align-items-baseline";
-  const spanTemperatura = document.createElement("span");
-  spanTemperatura.className = "";
-  spanTemperatura.textContent = `${anteponerCero(lugarData.climaActual.tempActual)}`;
-  const spanUnidadTemperatura = document.createElement("span");
-  spanUnidadTemperatura.className = "regions-card__unit";
-  spanUnidadTemperatura.textContent = lugarData.unidadMedida;
-  const divTempContainer = document.createElement("div");
-  divTempContainer.className = "tc-primary d-flex";
-  divTempContainer.append(spanTemperatura, spanUnidadTemperatura);
-  const iconoEstadoClimaActual = document.createElement("i");
-  iconoEstadoClimaActual.className = `fa-solid ${climaActual.icono} display-5 mt-3`;
-  h3TemperaturaActualDetalle.append(divTempContainer, iconoEstadoClimaActual);
-
-  const divMinMaxEstadoDetalle = document.createElement("div");
-  divMinMaxEstadoDetalle.className =
-    "ms-1 mb-0 d-flex align-items-baseline justify-content-between";
-  const pMinMAx = document.createElement("p");
-  const iconoFlechaMenor = document.createElement("i");
-  iconoFlechaMenor.className = "fa-solid fa-arrow-down";
-  const iconoFlechaMayor = document.createElement("i");
-  iconoFlechaMayor.className = "fa-solid fa-arrow-up";
-  const tempMin = pronostico.tempMinimas[0];
-  const tempMax = pronostico.tempMaximas[0];
-  pMinMAx.append(
-    iconoFlechaMenor,
-    `${anteponerCero(tempMin)}°`,
-    " / ",
-    iconoFlechaMayor,
-    `${anteponerCero(tempMax)}°`,
-  );
-  const pEstadoClimaActual = document.createElement("p");
-  const spanEstadoClimaActual = document.createElement("span");
-  spanEstadoClimaActual.className = "badge bgc-primary tc-accent";
-  spanEstadoClimaActual.textContent = climaActual.titulo;
-  pEstadoClimaActual.append(spanEstadoClimaActual);
-  divMinMaxEstadoDetalle.append(pMinMAx, pEstadoClimaActual);
-
-  divDatosContainer2.append(
-    pSubtituloTemperatura,
-    h3TemperaturaActualDetalle,
-    divMinMaxEstadoDetalle,
-  );
-  //===================================================
-  const divDatosContainer3 = document.querySelector("#datos-container-3");
-
-  const divVientoDetalle = document.createElement("div");
-  const h5VientoDetalle = document.createElement("h5");
-  const iconoViento = document.createElement("i");
-  iconoViento.className = "fa-solid fa-wind";
-  h5VientoDetalle.append(iconoViento, " Viento");
-  const pVelocidadViento = document.createElement("p");
-  pVelocidadViento.textContent = `${lugarData.climaActual.viento} km/h`;
-  divVientoDetalle.append(h5VientoDetalle, pVelocidadViento);
-
-  const divHumedadDetalle = document.createElement("div");
-  const h5HumedadDetalle = document.createElement("h5");
-  const iconoHumedad = document.createElement("i");
-  iconoHumedad.className = "fa-solid fa-water";
-  h5HumedadDetalle.append(iconoHumedad, " Humedad");
-  const pPorcentajeHumedad = document.createElement("p");
-  pPorcentajeHumedad.textContent = `${lugarData.climaActual.humedad}%`;
-  divHumedadDetalle.append(h5HumedadDetalle, pPorcentajeHumedad);
-
-  divDatosContainer3.append(divVientoDetalle, divHumedadDetalle);
-  //===================================================
-  const divDatosContainer4 = document.querySelector("#datos-container-4");
-
-  const h5SubtituloResumenSemana = document.createElement("h5");
-  h5SubtituloResumenSemana.className = "detail-view__subtitle";
-  h5SubtituloResumenSemana.textContent = "Resumen del clima semanal";
-
-  const pResumenCLimaDetalle = document.createElement("p");
-  const elementoIcono = document.createElement("i");
-  const { climaMasRepetido } = estadisticas;
-  const dataClimaMasRepetido = climaChileApp.traducirClima(
-    climaMasRepetido.codigoClima,
-  );
-
-  elementoIcono.className = `fa-solid ${dataClimaMasRepetido.icono} tc-primary`;
-  pResumenCLimaDetalle.append(
-    estadisticas.fraseResumenClima,
-    " ",
-    elementoIcono,
-  );
-
-  const h4SubtituloEstadisticas = document.createElement("h4");
-  h4SubtituloEstadisticas.className = "detail-view__subtitle";
-  h4SubtituloEstadisticas.textContent = "Estadísticas de la semana";
-
-  const ulEstaditicasDetalle = document.createElement("ul");
-  ulEstaditicasDetalle.className = "list-group list-group-horizontal mb-3";
-  // menorTempMin / mayorTempMax / tempPromedio
-  const { menorTempMin, mayorTempMax, tempPromedio } = estadisticas;
-  const temperaturasEstadisticas = [
-    { etiqueta: "Temp. mínima", valor: menorTempMin },
-    { etiqueta: "Temp. máxima", valor: mayorTempMax },
-    { etiqueta: "Temp. promedio", valor: tempPromedio },
-  ];
-  temperaturasEstadisticas.forEach(({ etiqueta, valor }) => {
-    let br = document.createElement("br");
-    const li = document.createElement("li");
-    li.className = "list-group-item detail-view__list-item";
-    li.append(`${etiqueta}:`, br, `${anteponerCero(valor)}°`);
-    ulEstaditicasDetalle.append(li);
-  });
-
-  const h4SubtituloCantidadDias = document.createElement("h4");
-  h4SubtituloCantidadDias.className = "detail-view__subtitle";
-  h4SubtituloCantidadDias.textContent = "Cantidad de días por tipo de clima";
-
-  const ulDiasPorClima = document.createElement("ul");
-  ulDiasPorClima.className = "list-group list-group-horizontal mb-4";
-
-  estadisticas.diasPorClima.forEach(({ cantidadDias, codigoClima }) => {
-    const clima = climaChileApp.traducirClima(codigoClima);
-    console.log("clima: ", clima);
-
-    const li = document.createElement("li");
-    li.className = "list-group-item detail-view__list-item";
-    const p = document.createElement("p");
-    p.className = "mb-1";
-    const i = document.createElement("i");
-    i.className = `fa-solid ${clima.icono} tc-primary`;
-    p.append(capitalizarTexto(clima.titulo), " ", i);
-    const span = document.createElement("span");
-    span.textContent = `${cantidadDias} ${cantidadDias === 1 ? "día" : "días"}`;
-    li.append(p, span);
-    ulDiasPorClima.append(li);
-  });
-
-  divDatosContainer4.append(
-    h5SubtituloResumenSemana,
-    pResumenCLimaDetalle,
-    h4SubtituloEstadisticas,
-    ulEstaditicasDetalle,
-    h4SubtituloCantidadDias,
-    ulDiasPorClima,
-  );
-
-  //==============================================
-  const ulPronosticoDetalle = document.querySelector("#pronostico-detalle");
-  ulPronosticoDetalle.textContent = "";
-  ulPronosticoDetalle.append(...renderizarPronostico(pronostico));
-  //===================================================
 }
 
 // Funcion para mostrar el detalle en base a un id
@@ -629,8 +708,8 @@ regionesContainer.addEventListener("click", (e) => {
   const card = e.target.closest(".regions-card");
   // guardian
   if (!card) return;
-  const idRegion = +card.dataset.id;
-  mostrarDetalle(idRegion);
+  const idCiudad = +card.dataset.id;
+  mostrarDetalle(idCiudad);
 });
 
 // evento para volver al Home

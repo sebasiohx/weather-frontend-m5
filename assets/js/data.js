@@ -453,6 +453,58 @@ class ClimaService {
       return `Semana ${nivelClima} mayormente ${traducirCodigoClima(codigoClima)}`;
     };
 
+    const crearFraseAlerta = () => {
+      let mostrarAlerta = false;
+      let alertaTemperatura = "";
+      let consejo = "";
+      const limiteDias = 5;
+
+      const tempAltas = pronostico.tempMaximas.filter((temp) => temp >= 28);
+      console.log(tempAltas);
+
+      const tempBajas = pronostico.tempMaximas.filter((temp) => temp <= 10);
+      console.log(tempBajas);
+
+      if (tempAltas.length >= limiteDias) {
+        mostrarAlerta = true;
+        alertaTemperatura = "muy calurosos";
+        consejo = " ¡protejase del sol!";
+      } else if (tempBajas.length >= limiteDias) {
+        mostrarAlerta = true;
+        alertaTemperatura = "muy fríos";
+        consejo = " ¡abriguese!";
+      }
+      //==============================================
+      const { codigoClima, cantidadDias } = climaMasRepetido;
+
+      const traducirCodigoClima = (codigo) => {
+        // Si es despejado o nublado, mejor no generar una alerta
+        if ([0, 1, 2, 3].includes(codigo)) return "";
+
+        if (
+          [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(codigo)
+        )
+          return "con mucha lluvia";
+        if (codigo === 77) return "con granizo";
+        if ([71, 73, 75, 85, 86].includes(codigo)) return "con nevadas";
+        if ([95, 96, 99].includes(codigo)) return "con tormentas";
+
+        return "";
+      };
+
+      let climaTraducido = traducirCodigoClima(codigoClima);
+
+      if (cantidadDias >= limiteDias && climaTraducido !== "") {
+        mostrarAlerta = true;
+        consejo = " ¡tome precauciones!";
+      }
+
+      if (!mostrarAlerta) {
+        return "";
+      }
+      return `Se pronostican varios días ${alertaTemperatura} ${climaTraducido}${consejo}`;
+    };
+
     return {
       menorTempMin: menorTempMin,
       mayorTempMax: mayorTempMax,
@@ -460,6 +512,7 @@ class ClimaService {
       diasPorClima: diasPorClima,
       climaMasRepetido: climaMasRepetido,
       fraseResumenClima: crearFraseResumen(),
+      fraseAlerta: crearFraseAlerta(),
     };
   }
 }
