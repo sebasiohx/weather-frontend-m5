@@ -30,6 +30,12 @@
   }
 }
 
+@mixin tablet {
+  @media screen and ($mobile < width <= $tablet) {
+    @content;
+  }
+}
+
 @mixin monitor {
   @media screen and (width >= $monitor) {
     @content;

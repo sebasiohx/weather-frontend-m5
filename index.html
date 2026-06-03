@@ -42,8 +42,11 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-2">
+        <div
+          class="collapse navbar-collapse nav-weather__group"
+          id="navbarSupportedContent"
+        >
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-lg-2">
             <li class="nav-item">
               <a class="nav-link btn-home active" aria-current="page" href="#"
                 >Inicio</a
@@ -58,8 +61,12 @@
               >
             </li>
           </ul>
-          <form id="form-busqueda" class="d-flex" role="search">
-            <div class="me-2 position-relative">
+          <form
+            id="form-busqueda"
+            class="d-flex mb-3 mb-lg-0 me-lg-2"
+            role="search"
+          >
+            <div class="me-2 position-relative w-100">
               <input
                 id="input-busqueda"
                 class="nav-weather__input form-control"
@@ -73,12 +80,34 @@
             </div>
             <button
               id="btn-busqueda"
-              class="nav-weather__btn-search btn btn-primary"
+              class="nav-weather__btn-search btn"
               type="submit"
             >
               Buscar
             </button>
           </form>
+          <div
+            class="btn-group d-none"
+            role="group"
+            aria-label="Cambiar unidad de temperatura"
+          >
+            <button
+              type="button"
+              class="btn nav-weather__btn-unit active"
+              title="Celsius"
+              id="btn-c"
+            >
+              °C
+            </button>
+            <button
+              type="button"
+              class="btn nav-weather__btn-unit"
+              title="Farenheit"
+              id="btn-f"
+            >
+              °F
+            </button>
+          </div>
         </div>
       </div>
     </nav>

@@ -9,6 +9,8 @@ const vistaDetalle = document.querySelector("#vista-detalle");
 const detalleContainer = document.querySelector("#detalle-container");
 const pronosticoDetalle = document.querySelector("#pronostico-detalle");
 const botonesHome = document.querySelectorAll(".btn-home");
+const btnCelsius = document.querySelector("#btn-c");
+const btnFarenheit = document.querySelector("#btn-f");
 
 /* variables globales */
 const climaChileApp = new ClimaService(regionesChile);
@@ -108,7 +110,7 @@ function renderizarPronostico(pronostico) {
     iconoClimaDia.className = `fa-solid ${clima.icono} tc-primary`;
     iconoClimaDia.title = clima.titulo;
     const spanEstadoClimatico = document.createElement("span");
-    spanEstadoClimatico.className = "badge bgc-accent";
+    spanEstadoClimatico.className = "badge bgc-accent d-block d-lg-inline";
     spanEstadoClimatico.textContent = clima.titulo;
     divClimas.append(iconoClimaDia, " ", spanEstadoClimatico);
     const pTemperaturas = document.createElement("p");
@@ -403,12 +405,12 @@ async function renderizarDetalle(id) {
 
   try {
     // cargo los datos y genero estadisticas
-    //const lugarData = await climaChileApp.cargarDetalleLugar();
+    const lugarData = await climaChileApp.cargarDetalleLugar(id);
 
-    const lugarData = await Promise.race([
+    /* const lugarData = await Promise.race([
       climaChileApp.cargarDetalleLugar(id),
       timeoutPromesa(4000),
-    ]);
+    ]); */
 
     const climaActual = climaChileApp.traducirClima(
       lugarData.climaActual.clima,

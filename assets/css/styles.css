@@ -188,10 +188,15 @@
   background-color: #2fd5ff;
   color: #243870;
 }
+.nav-weather__group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 .nav-weather__input {
   border: 1px solid #243870;
   color: #243870;
-  max-width: 214px;
+  max-width: 300px;
 }
 .nav-weather__input--error {
   background-color: red;
@@ -204,10 +209,41 @@
 .nav-weather__btn-search {
   background-color: #243870;
   border: 1px solid #243870;
+  color: #e0e0e0;
+  min-width: 80px;
 }
 .nav-weather__btn-search:hover {
   background-color: #1a1a2e;
   color: #2fd5ff;
+}
+.nav-weather__btn-unit {
+  border-color: #243870;
+  color: #1a1a2e;
+}
+.nav-weather__btn-unit.active {
+  border-color: #243870;
+  background-color: #243870;
+  color: #e0e0e0;
+}
+.nav-weather__btn-unit:hover {
+  background-color: #1a1a2e;
+  color: #2fd5ff;
+}
+@media screen and (width <= 767px) {
+  .nav-weather__group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .nav-weather__input {
+    width: 100%;
+    max-width: unset;
+  }
+}
+@media screen and (767px < width <= 991px) {
+  .nav-weather__group {
+    flex-direction: column;
+    align-items: flex-end;
+  }
 }
 
 .footer {
