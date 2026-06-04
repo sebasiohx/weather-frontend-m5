@@ -1,13 +1,13 @@
-# MeteoChile (prototipo de app del clima de Chile) v5.0
+# ClimaChile (prototipo de app del clima de Chile) v5.0
 
 🔗[https://github.com/sebasiohx/weather-frontend-m5](https://github.com/sebasiohx/weather-frontend-m5)
 
 ## 📘 Características
 
 - Muestra el clima actual de Santiago y las otras capitales de las regiones de Chile.
-- Hecho con data falsa que simula la información del clima mediante una lista de objetos.
+- Hecho con datos de una API del clima ([open-meteo.com](https://open-meteo.com/)) y data local con información de las regiones de Chile.
 - Desarrollado con JavaScript vanilla para renderizar los datos en el DOM mediante la creación de nodos.
-- Hecho con Bootstrap para el diseño responsivo y SASS (scss)
+- Hecho con **Bootstrap** para el diseño responsivo y SASS (scss)
 - Uso de la metodología BEM para escribir los estilos CSS.
 
 ## 🛠 Instalación
@@ -21,72 +21,120 @@ git clone https://github.com/sebasiohx/weather-frontend-m5.git
 # 2. Entra a la carpeta del proyecto
 cd weather-frontend-m5
 
-# 3. Abre el proyecto (sin dependencias, es vanilla JS)
-# Opción A: Abre index.html directo en el navegador
-# Opción B: Usa Live Server en VS Code
+# 3. Abre el proyecto en el en VS Code y usa Live Server (al usar APIs necesita levantar un servidor)
 ```
 
-> ⚠️ **Requisitos previos:** Solo necesitas un navegador moderno. No se requiere Node.js ni npm.
+> ⚠️ **Requisitos previos:** Solo necesitas VS Code y un navegador moderno. No se requiere Node.js ni npm.
+
+## 📡 APIs utilizadas
+
+En éste proyecto se utiliza una API del clima llamada **Open-Meteo** en 2 versiones, una que se llama _Geocoding API_ y otra que se llama _Weather Forecast API_
+
+- Con **Geocoding API** se pueden obtener las coordenadas de una ciudad, se utilizan para darle la _latitud_ y _longitud_ a la API del pronóstico.
+  Link: [open-meteo.com/en/docs/geocoding-api](https://open-meteo.com/en/docs/geocoding-api)
+
+- Con **Weather Forecast API** se pueden obtener los datos del clima actual y el pronóstico climático de una ciudad en base a sus coordenadas.
+  Link: [open-meteo.com/en/docs](https://open-meteo.com/en/docs)
 
 ## 📦 Estructura de datos
 
-Los datos están organizados en 4 niveles anidados:
+Para manejar los datos de creo un servicio en base a una clase llamada **ClimaService**, la cual recive como parametro la lista de lugares llamada **regionesChile** que es una lista con las regiones de Chile.
 
-1. Nivel 1: el arreglo `regionesChile[{}]` es una lista de objetos que contiene 16 elementos, cada uno por región.
-2. Nivel 2: Cada elemento de la lista es un objeto `region{}` el cual tiene 2 tipo de datos: los datos simples (nombres, cifras de las temperaturas actuales y otros datos) y datos compuestos (referencias a un objeto `clima{}`, un array `pronosticoSemanal[]`)
-3. Nivel 3: la lista `pronosticoSemanal[]` contiene 7 objetos, correspondientes a cada uno de los días de la semana. Cada elemento tiene las temperaturas de cada día junto con su estado climático (el cual hace referencia al objeto `clima{}`)
-4. Nivel 4: el objeto `clima{}` tiene como propiedades otros 8 objetos con el nombre y el icono correspondiente a cada uno de los tipos de climas (o estados climáticos) posibles.
+**ClimaService** puede hacer lo siguiente:
+
+- Con **obtenerCoordenadas()** se pueden obtener las coordenadas específicas de un lugar utilizando su nombre como argumento (en este caso el nombre de la ciudad capital de cada región).
+- Con **obtenerClima()** se pueden obtener los datos del clima actual y el pronóstico de los siguientes 6 días de un lugar utilizando su latitud y longitud (coordenadas que se pueden obtener con el método `obtenerCoordenadas()`)
+- Con **cargarLugares()** se puede obtener un lista de objetos con ciertos datos climáticos específicos de cada ciudad (no todos los datos) Útil para renderizar un listado de ciudades.
+- Con **cargarDetalleLugar()** se puede obtener un objeto con todos los datos de una ciudad específica (las variables de la API fueron renombradas como atributos del objeto para evitar errores en caso de que la API decida hacer cambios en los nombres que puedan afectar su consumo)
+- Con **traducirClima()** se puede obtener uno de los climas del objeto `climas{}` correspondiente al codigo numérico del clima que trae la API. Cada clima es un objeto con el titulo y la referencia a un icono de la librería Font Awesome ([fontawesome.com](https://fontawesome.com/)) Dependiendo del clima se puede tener una versión para el día o la noche.
+- Con **calcularEstadisticas()** Se puede obtener un objeto con los datos de las estadísticas calculadas a partir de los datos del _pronóstico_ que se pasa como argumento, correspondiente al objeto _pronosticoSemanal_ que trae el método `cargarDetalleLugar()`.
+
+### Ejemplo de los datos que se obtienen de un lugar (en este caso Santiago)
 
 ```js
-regionesChile = [
-  Region {
-    id: number; // posición en el array (0 a 15)
-    nombreRegion: string; // nombre oficial de la región
-    nombreCiudad: string; // ciudad capital de la región
-    img: string; // nombre del archivo de imagen (ej: "arica.jpg")
-    descripcion: string; // párrafo descriptivo de la ciudad
-    tempMinima: number; // temperatura mínima en °C
-    tempMaxima: number; // temperatura máxima en °C
-    tempActual: number; // temperatura a las 13:00 hrs en °C
-    estadoClimaticoActual: Clima{}; // objeto Clima.clima{texto, icono}
-    viento: number; // velocidad del viento en km/h
-    humedad: number; // porcentaje de humedad
-    pronosticoSemanal: [ // array de 7 días (lunes a domingo)
-      DiaSemanal {
-        nombreDia: string; // "lunes", "martes", etc.
-        siglas: string; // "lun", "mar", etc.
-        climaDia: Clima{}; // referencia a un objeto Clima
-        climaNoche: Clima{}; // referencia a un objeto Clima
-        tempMin: number; // temperatura mínima en °C
-        tempMax: number; // temperatura máxima en °C
-      },
-    ];
-  }
-]
+{
+    "id": 6,
+    "nombreRegion": "Región Metropolitana de Santiago",
+    "nombreCiudad": "Santiago",
+    "img": "santiago.jpg",
+    "descripcion": "lorem ipsum...",
+    "unidadMedida": "°C",
+    "climaActual": {
+        "fecha": "2026-06-03T01:45",
+        "tempActual": 11,
+        "humedad": 51,
+        "coberturaNubes": 98,
+        "viento": 1,
+        "esDeDia": false,
+        "clima": 3
+    },
+    "pronosticoSemanal": {
+        "fechas": [],
+        "tempMaximas": [],
+        "tempMinimas": [],
+        "climas": [],
+        "tempMedias": [],
+        "probPrecipitacion": []
+    }
+}
 ```
 
-## 📊 Resumen calculo de estadísticas
+## 📊 Resumen cálculo de estadísticas
+
+A continuación se describe como se hacen los cálculos dentro del método **calcularEstadisticas()**
 
 ### Estadísticas de la semana
 
-- **Temperatura mínima:** Se toma el valor más bajo de las temperaturas mínimas de la semana.
-- **Temperatura maxima:** Se toma el valor más alto de las temperaturas máximas de la semana.
-- **Temperatura promedio:** Se hace una suma de todas las temperaturas mínimas y máximas de los días de la semana y se divide por el total (14 elementos) con la ayuda de la función `calcularPromedio()`
+1. **Temperatura mínima:** Se toma el valor más bajo de las temperaturas mínimas de la semana.
+2. **Temperatura maxima:** Se toma el valor más alto de las temperaturas máximas de la semana.
+3. **Temperatura promedio:** Se hace una suma de todas las temperaturas que vienen en la lista de temperaturas medias que vienen desde la API y se divide por el total.
 
 ### Cantidad de días por tipo de clima
 
-1. La variable `conteoTemporalClima`, tiene como valor la lista de `pronosticoSemanal` al cual se le aplica el metodo `.reduce()` para retornar un objeto que contiene los diferentes tipos de climas de la semana, con su icono y cantidad de días repetidos.
-2. tomo la variable `conteoTemporalClima` y la convierto en array usando ` Object.values()` para crear un lista de objetos con los datos de los climas y cuantas veces se repitieron. Esto se le asigna a la variable `diasPorClimas` que sirve para renderizar el listado.
+1. La variable `conteoTemporalClima`, tiene como valor un `reduce()` aplicado a la lista de `climas[]` del pronostico `pronostico.climas` el cual internamente usa el método `traducirClima()` para obtener un tipo de clima y usarlo como propiedad por cada elemento de la lista. Si el clima se repite, se va sumando a la propiedad ya existente. Éste método devuelve un objeto con los tipos de climas y su cantidad de días repetidos.
+2. Luego este objeto se convierte en lista y se asigna a la variable `diasPorClima`
 
 ### Resumen del clima semanal
 
-1. Se aplica el método `.reduce()` a `diasPorClimas` para retornar un único objeto con el clima más repetido, el cual se le asigna a la variable `climaMasRepetido`.
-2. Se hace un promedio de las temperaturas máximas de la semana mediante la función `calcularPromedio()` y se le asigna a la variable `promedioTempMax`.
-3. se utiliza la función `crearFraseResumen()` la cual recibe como argumentos las variables `promedioTempMax` y `climaMasRepetido`. Esta función maneja internamente un rango de niveles de temperatura y un listado de los climas con los textos conjugados. Usando los datos de los parámetros retorna una frase que resume el clima de la semana ( por ej: "Semana calurosa mayormente soleada") junto con el icono del clima mencionado.
+1. Se aplica el método `.reduce()` a `diasPorClima` para retornar un único objeto con el clima más repetido, el cual se le asigna a la variable `climaMasRepetido`.
+2. Se hace un promedio de las temperaturas máximas de la semana y se asigna a la variable `promedioTempMax`.
+3. se utiliza la función `crearFraseResumen()`. Esta función maneja internamente un rango de niveles de temperatura y una función `convertirClima()` con los textos de los climas conjugados. Usando los resultados de `climaMasRepetido` y `convertirClima` retorna una frase que resume el clima de la semana ( por ej: _"Semana calurosa mayormente soleada"_) junto con el icono del clima mencionado.
+
+### Mensaje de alerta climática
+
+1. Este metodo de divide en 2 partes, la primera evalúa si la temperaturas son muy altas o muy bajas en un periodo de 5 días dentro del pronóstico, si es verdadero entonces activa la alerta por temperatura y devuelve un frase.
+2. En la segunda parte, se evalúa si `climaMasRepetido` esta dentro de la funcion interna `convertirCodigoClima()` y si se repite durante 5 o más días seguidos dentro del pronóstico. En éste caso se activa una alerta por clima y devuelve una frase.
+3. Finalmente, si `mostrarAlerta` es _true_ retorna en general una alerta de clima, o de temperatura o ambas. Si es _false_ devuelve un _string_ vacío y no muestra nada.
+
+### Ejemplo del objeto con los datos calculados a partir de un pronóstico
+
+```js
+{
+    "menorTempMin": 1,
+    "mayorTempMax": 9,
+    "tempPromedio": 5,
+    "diasPorClima": [
+        {
+            "codigoClima": 61,
+            "cantidadDias": 5
+        },
+        {
+            "codigoClima": 3,
+            "cantidadDias": 2
+        }
+    ],
+    "climaMasRepetido": {
+        "codigoClima": 61,
+        "cantidadDias": 5
+    },
+    "fraseResumenClima": "Semana muy fría mayormente con lluvias",
+    "fraseAlerta": "Se pronostican varios días muy fríos con mucha lluvia ¡tome precauciones!"
+}
+```
 
 ## 📁 Estructura del proyecto
 
-```
+```txt
 WEATHER-FRONTEND-M3/
 ├── assets/
 │   ├── css/
