@@ -21,10 +21,12 @@ git clone https://github.com/sebasiohx/weather-frontend-m5.git
 # 2. Entra a la carpeta del proyecto
 cd weather-frontend-m5
 
-# 3. Abre el proyecto en el en VS Code y usa Live Server (al usar APIs necesita levantar un servidor)
+# 3. Abre el proyecto (sin dependencias, es vanilla JS)
+# Opción A: Abre index.html directo en el navegador
+# Opción B: Usa Live Server en VS Code
 ```
 
-> ⚠️ **Requisitos previos:** Solo necesitas VS Code y un navegador moderno. No se requiere Node.js ni npm.
+> ⚠️ **Requisitos previos:** Solo necesitas un navegador moderno. No se requiere Node.js ni npm.
 
 ## 📡 APIs utilizadas
 
