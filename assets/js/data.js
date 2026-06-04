@@ -13,7 +13,7 @@ const climas = {
   nublado: { titulo: "nublado", icono: "fa-cloud" },
   lluvia: { titulo: "lluvias", icono: "fa-cloud-rain" },
   granizo: { titulo: "granizo", icono: "fa-cloud-meatball" },
-  nevada: { titulo: "nevada", icono: "fa-snowflake" },
+  nevada: { titulo: "nevadas", icono: "fa-snowflake" },
   tormenta: { titulo: "tormenta", icono: "fa-cloud-bolt" },
   nocheDespejada: { titulo: "noche despejada", icono: "fa-moon" },
   nocheNublada: { titulo: "noche nublada", icono: "fa-cloud-moon" },
@@ -313,8 +313,8 @@ class ClimaService {
 
     const pronosticoSemanal = {
       fechas: daily.time.map((d) => d.replaceAll("-", "/")),
-      tempMaximas: daily.temperature_2m_max.map((t) => Math.round(t)),
-      tempMinimas: daily.temperature_2m_min.map((t) => Math.round(t)),
+      tempMaximas: daily.temperature_2m_max.map((t) => Math.ceil(t)),
+      tempMinimas: daily.temperature_2m_min.map((t) => Math.floor(t)),
       climas: daily.weather_code,
       tempMedias: daily.temperature_2m_mean.map((t) => Math.round(t)),
       probPrecipitacion: daily.precipitation_probability_mean,
@@ -334,14 +334,14 @@ class ClimaService {
     return this.dataLugarDetalle;
   }
 
-  cambiarUnidadTemp(nuevaUnidad) {
+  /* cambiarUnidadTemp(nuevaUnidad) {
     if (!["celsius", "fahrenheit"].includes(nuevaUnidad)) {
       console.error("Unidad de temperatura invalida");
       return;
     }
     this.unidadTemperatura = nuevaUnidad;
     location.reload();
-  }
+  } */
 
   traducirClima(codigo, esDia = true) {
     let objetoClima = {};
@@ -434,7 +434,7 @@ class ClimaService {
 
       const { codigoClima } = climaMasRepetido;
 
-      const traducirCodigoClima = (codigo) => {
+      const convertirClima = (codigo) => {
         let textoClima = "";
         if (codigo === 0) textoClima = "despejada";
         if ([1, 2].includes(codigo)) textoClima = "con nubosidad parcial";
@@ -450,7 +450,7 @@ class ClimaService {
         return textoClima;
       };
 
-      return `Semana ${nivelClima} mayormente ${traducirCodigoClima(codigoClima)}`;
+      return `Semana ${nivelClima} mayormente ${convertirClima(codigoClima)}`;
     };
 
     const crearFraseAlerta = () => {
@@ -477,7 +477,7 @@ class ClimaService {
       //==============================================
       const { codigoClima, cantidadDias } = climaMasRepetido;
 
-      const traducirCodigoClima = (codigo) => {
+      const convertirCodigoClima = (codigo) => {
         // Si es despejado o nublado, mejor no generar una alerta
         if ([0, 1, 2, 3].includes(codigo)) return "";
 
@@ -492,7 +492,7 @@ class ClimaService {
         return "";
       };
 
-      let climaTraducido = traducirCodigoClima(codigoClima);
+      let climaTraducido = convertirCodigoClima(codigoClima);
 
       if (cantidadDias >= limiteDias && climaTraducido !== "") {
         mostrarAlerta = true;
@@ -523,7 +523,7 @@ climaChile.cargarLugares().then((resultado) => {
   console.log("Lista lugares:", resultado);
 });
 
-climaChile.cargarDetalleLugar(6).then((resultado) => {
+climaChile.cargarDetalleLugar(14).then((resultado) => {
   console.log("Detalle lugar:", resultado);
   console.log(
     "Estadisticas detalle:",

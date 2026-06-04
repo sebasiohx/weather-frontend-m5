@@ -26,7 +26,8 @@ function capitalizarTexto(texto) {
 
 // Función para poner un cero "0" para las temperaturas que vienen con 1 dígito
 function anteponerCero(num) {
-  if (!num) return "";
+  if (num === null || num === undefined) return "";
+  if (num === 0) return "0";
   return String(num).padStart(2, "0");
 }
 
