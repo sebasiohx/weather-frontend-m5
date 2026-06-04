@@ -1,9 +1,9 @@
 /* ============================================================
-   MeteoChile — Pseudo datos regiones de Chile
-   Criterio climático aplicado:
-   · Norte (zonas 0-3): desértico, soleado, temperaturas altas
-   · Centro (zonas 4-7): mediterráneo, templado, mix sol/nubes
-   · Sur (zonas 8-15): lluvioso, frío, predominio nublado/lluvia
+  ClimaChile — datos regiones de Chile
+  Criterio climático aplicado:
+  · Norte (zonas 0-3): desértico, soleado, temperaturas altas
+  · Centro (zonas 4-7): mediterráneo, templado, mix sol/nubes
+  · Sur (zonas 8-15): lluvioso, frío, predominio nublado/lluvia
    ============================================================ */
 
 /* lista climas */
@@ -460,10 +460,8 @@ class ClimaService {
       const limiteDias = 5;
 
       const tempAltas = pronostico.tempMaximas.filter((temp) => temp >= 28);
-      console.log(tempAltas);
 
       const tempBajas = pronostico.tempMaximas.filter((temp) => temp <= 10);
-      console.log(tempBajas);
 
       if (tempAltas.length >= limiteDias) {
         mostrarAlerta = true;
@@ -478,7 +476,6 @@ class ClimaService {
       const { codigoClima, cantidadDias } = climaMasRepetido;
 
       const convertirCodigoClima = (codigo) => {
-        // Si es despejado o nublado, mejor no generar una alerta
         if ([0, 1, 2, 3].includes(codigo)) return "";
 
         if (
@@ -516,23 +513,3 @@ class ClimaService {
     };
   }
 }
-
-const climaChile = new ClimaService(regionesChile);
-
-climaChile.cargarLugares().then((resultado) => {
-  console.log("Lista lugares:", resultado);
-});
-
-climaChile.cargarDetalleLugar(14).then((resultado) => {
-  console.log("Detalle lugar:", resultado);
-  console.log(
-    "Estadisticas detalle:",
-    climaChile.calcularEstadisticas(resultado.pronosticoSemanal),
-  );
-});
-
-async function testApi(app) {
-  console.log(app);
-}
-
-testApi(climaChile);

@@ -16,7 +16,6 @@ const btnFarenheit = document.querySelector("#btn-f");
 const climaChileApp = new ClimaService(regionesChile);
 
 /* Funciones */
-// Función para traducir el codigo del clima a un icono y texto
 
 // Función para poner en mayuscula la primera letra de un texto
 function capitalizarTexto(texto) {
@@ -52,14 +51,11 @@ function mostrarLoading() {
 
 // Funcióm para mostrar un mensaje de alerta cuando no se carguen los datos
 function mostrarAlertaErrorApi(elementoHtml) {
-  //<div class="alert alert-danger" role="alert">
   const divAlerta = document.createElement("div");
   divAlerta.className = "alert alert-danger";
   divAlerta.setAttribute("role", "alert");
-  // <i class="fa-solid fa-triangle-exclamation"></i>
   const iconoAlerta = document.createElement("i");
   iconoAlerta.className = "fa-solid fa-triangle-exclamation";
-  // <a href="#" class="alert-link">
   const linkAlerta = document.createElement("a");
   linkAlerta.className = "alert-link";
   linkAlerta.href = "#";
@@ -130,7 +126,6 @@ function renderizarPronostico(pronostico) {
 
 // Funcionn para rendrizar la seccion Hero
 async function renderizarHero() {
-  // Antes del await
   const h2Ciudad = document.querySelector("#nombre-ciudad-hero");
   const h2Region = document.querySelector("#nombre-region-hero");
   const h1CifraTempreatura = document.querySelector("#cifra-temperatura-hero");
@@ -153,7 +148,6 @@ async function renderizarHero() {
   divCardPronostico.classList.add("d-flex", "align-content-center");
 
   try {
-    // Llegan los datos
     const indexRm = climaChileApp.listaLugares.findIndex(
       (ciudad) => ciudad.nombreCiudad === "Santiago",
     );
@@ -183,7 +177,6 @@ async function renderizarHero() {
       hour12: false,
     });
 
-    // limpiamos y renderizamos
     h2Ciudad.textContent = "";
     const iconoCiudad = document.createElement("i");
     iconoCiudad.className = "fa-solid fa-location-dot tc-primary";
@@ -334,7 +327,6 @@ function crearCard(lugar) {
   p.append(spanRango);
   p.append(spanEstado);
   //=================================================
-  // Ensamblar todo
   cardBody.append(h3);
   cardBody.append(h2);
   cardBody.append(p);
@@ -364,7 +356,6 @@ async function rendeizarListaCards(listaLugares) {
 async function buscarLugar() {
   const textoInput = inputBusqueda.value.trim().toLowerCase();
 
-  // para reiniciar el listado o si no los datos se van acumulando
   regionesContainer.textContent = "";
   regionesContainer.append(mostrarLoading());
 
@@ -389,7 +380,6 @@ async function renderizarDetalle(id) {
   const divAlerta = document.querySelector("#alerta-error");
   const divAlertaClimatica = document.querySelector("#alerta-climatica");
 
-  // Limpiar todos los contenedores antes de renderizar
   document.querySelector("#datos-container-1").textContent = "";
   document.querySelector("#img-ciudad-detalle").textContent = "";
   document.querySelector("#datos-container-2").textContent = "";
@@ -405,27 +395,18 @@ async function renderizarDetalle(id) {
   divAlertaClimatica.classList.add("d-none");
 
   try {
-    // cargo los datos y genero estadisticas
     const lugarData = await climaChileApp.cargarDetalleLugar(id);
-
-    /* const lugarData = await Promise.race([
-      climaChileApp.cargarDetalleLugar(id),
-      timeoutPromesa(4000),
-    ]); */
 
     const climaActual = climaChileApp.traducirClima(
       lugarData.climaActual.clima,
       lugarData.climaActual.esDeDia,
     );
-    console.log("clima actual: ", climaActual);
 
     const pronostico = lugarData.pronosticoSemanal;
 
     const estadisticas = climaChileApp.calcularEstadisticas(
       lugarData.pronosticoSemanal,
     );
-
-    console.log("Info estadisticas detalle", estadisticas);
 
     //===================================================
     const divDatosContainer1 = document.querySelector("#datos-container-1");
@@ -586,7 +567,6 @@ async function renderizarDetalle(id) {
 
     estadisticas.diasPorClima.forEach(({ cantidadDias, codigoClima }) => {
       const clima = climaChileApp.traducirClima(codigoClima);
-      console.log("clima: ", clima);
 
       const li = document.createElement("li");
       li.className = "list-group-item detail-view__list-item";
@@ -709,7 +689,7 @@ inputBusqueda.addEventListener("input", (e) => {
 // evento click en alguna card
 regionesContainer.addEventListener("click", (e) => {
   const card = e.target.closest(".regions-card");
-  // guardian
+
   if (!card) return;
   const idCiudad = +card.dataset.id;
   mostrarDetalle(idCiudad);
